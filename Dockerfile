@@ -1,7 +1,7 @@
 # From official golang alpine image
 FROM gopex/ubuntu_golang:1.6rc1
 MAINTAINER Albin Gilles "gilles.albin@gmail.com"
-ENV REFRESHED_AT 2016-02-12.1
+ENV REFRESHED_AT 2016-02-16
 
 # Port exposed by this application
 EXPOSE 3000
