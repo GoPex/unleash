@@ -9,12 +9,14 @@ import (
 
 // Log all variables parsed with envconfig
 func (specification *Specification) Describe() {
-    log.Debug("Specification.WorkingDirectory=", specification.WorkingDirectory)
+    log.Debug("WorkingDirectory=", specification.WorkingDirectory)
+    log.Debug("RegistryURL=", specification.RegistryURL)
+    log.Debug("RegistryUsername=", specification.RegistryUsername)
 }
 
 // Struct to hold the configuration of the application
 type Specification struct {
-    WorkingDirectory string `envconfig:"working_directory"`
+    WorkingDirectory string `envconfig:"working_directory" default:"/tmp"`
     RegistryURL      string `envconfig:"registry_url"`
     RegistryUsername string `envconfig:"registry_username"`
     RegistryPassword string `envconfig:"registry_password"`

@@ -29,7 +29,6 @@ func Run() {
     // Parse the configuration
     config, err := ParseConfiguration()
     if err != nil {
-        log.Fatal(err)
         panic("Not able to parse the configuration ! Cause: " + err.Error())
     }
 
@@ -43,6 +42,9 @@ func Run() {
     // Github push event
     githubEvents := r.Group("/events/github", GithubHmacAuthenticator())
     githubEvents.POST("/push", githubPush)
+
+    // Bitbucket push evet
+    r.POST("/events/bitbucket/push", bitbucketPush)
 
     // Unleash!
     r.Run() // listen and serve on port defined by environment variable PORT
