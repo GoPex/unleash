@@ -13,7 +13,7 @@ func Clone(repositoryUrl string, destinationPath string, branch string) error {
     log.Debug("Cloning the repository ", repositoryUrl, " to ", destinationPath, " on branch ", branch, " ...")
 
     // Preparing the clone call
-    opts := git.CloneOptions{}
+    opts := git.CloneOptions{CheckoutBranch: branch}
 
     // Cloning the repository
     repo, err := git.Clone(repositoryUrl, destinationPath, &opts)

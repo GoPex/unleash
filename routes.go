@@ -11,6 +11,7 @@ import (
     "bitbucket.org/gopex/unleash/bindings"
 )
 
+// Controller for the POST events/github/push route. Based on the event received from Github, this will schedule a BuildAndPushFromRepository background job.
 func githubPush (c *gin.Context){
     // Parse incomming JSON from github
     var json bindings.GithubPushEvent

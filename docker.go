@@ -1,7 +1,9 @@
 package unleash
 
 import (
-    "bufio"
+    "encoding/json"
+    "errors"
+    "io"
     "os"
     log "github.com/Sirupsen/logrus"
     "regexp"
@@ -14,17 +16,43 @@ import (
     "github.com/GoPex/dockerclient"
 )
 
-    //// Construct the tag to use when building the image
-    //image_tag := repository_name
-    //if branch != ""{
-        //image_tag = image_tag + ":" + branch
-    //} else {
-        //image_tag = image_tag + ":latest"
-    //}
-    //log.Debug("Image repository and tag used ", image_tag)
+var (
+    bashColorRegex, _ = regexp.Compile("\x1b\\[[0-9;]*m")
+    buildSuccessfulRegex, _ = regexp.Compile("(Successfully built )[a-z0-9]*")
+)
 
+type MessageStream struct {
+    Stream      string `json:"stream"`
+    Error       string `json:"error"`
+    ErrorDetail struct {
+        Message string `json:"message"`
+    } `json:"errorDetail"`
+}
+
+// Send a PushImage request to the docker daemon
+func PushImage(imageRepository string) error {
+    log.Info("Pushing image ", imageRepository, " to the default registry ...")
+
+    // Initialize a Docker client
+    docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
+
+    // Authentication
+    authentication := dockerclient.AuthConfig{Username: Config.RegistryUsername, Password: Config.RegistryPassword, Email: Config.RegistryEmail}
+
+    // Push the image to the default registry
+    if err := docker.PushImage(imageRepository, "", &authentication); err != nil {
+        return err
+    }
+
+    log.Info("Image ", imageRepository, " pushed to the default registry !")
+
+    return nil
+}
+
+// Send a BuildImage request to the docker daemon by sending a tar
+// built with the given directory.
 func BuildFromDirectory(directoryPath string, imageRepository string) (string, error) {
-    log.Info("Building Dockerfile for directory ", directoryPath, " ...")
+    log.Debug("Path to the directory ", directoryPath)
 
     // Path to the tar of the repository
     directoryTarPath := directoryPath + ".tar"
@@ -40,13 +68,12 @@ func BuildFromDirectory(directoryPath string, imageRepository string) (string, e
         return "", err
     }
 
-    log.Info("Dockerfile for directory ", directoryPath, " has been builded !")
-
     return id, nil
 }
 
+// Send a BuildImage request to the docker daemon by sending the given tar.
 func BuildFromTar(tarPath string, imageRepository string) (string, error) {
-    log.Info("Building Dockerfile for tar ", tarPath, " ...")
+    log.Info("Building Dockerfile for tar ", tarPath, " using tag ", imageRepository, " ...")
 
     // Initialize a Docker client
     docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
@@ -64,28 +91,35 @@ func BuildFromTar(tarPath string, imageRepository string) (string, error) {
 
     // Send the build request to Docker
     reader, err := docker.BuildImage(buildImageConfig)
+    defer reader.Close()
     if err != nil {
         return "", err
     }
 
-    // Will wait for the last lign of the Docker build command to parse the generated id
-    buildSuccessful, err := regexp.Compile("(Successfully built )[a-z0-9]*")
-
     // Capture the build output and wait its end before continuing, get the image id at the end
-    var id string
-    rd := bufio.NewScanner(reader)
-    for rd.Scan() {
-        message := rd.Text()
-        log.Debug(message)
+    jsonReader := json.NewDecoder(reader)
+    var message MessageStream
+    for {
+        if err := jsonReader.Decode(&message); err == io.EOF {
+            break
+        } else if err != nil {
+            log.Error(err)
+        }
 
-        if buildSuccessful.MatchString(message) {
-            id = extractId(message)
+        if message.Stream != "" {
+            message.Stream = cleanMessage(message.Stream)
+            log.Debug(message.Stream)
+        }
+        if message.ErrorDetail.Message != "" {
+            message.ErrorDetail.Message = cleanMessage(message.ErrorDetail.Message)
+            log.Error(message.ErrorDetail.Message)
+            return "", errors.New(message.ErrorDetail.Message)
         }
     }
 
-    // The Docker build image output has ended, check for errors
-    if err = rd.Err(); err != nil {
-        return "", err
+    var id string
+    if message.Stream != "" && buildSuccessfulRegex.MatchString(message.Stream) {
+        id = extractId(message.Stream)
     }
 
     log.Info("Dockerfile for tar ", tarPath, " has been builded ", imageRepository, " with id ", id," !")
@@ -93,8 +127,14 @@ func BuildFromTar(tarPath string, imageRepository string) (string, error) {
     return id, nil
 }
 
+// Extract the id of a response message coming from the Docker daemon
 func extractId(message string) string {
     tokens := strings.Split(message, " ")
-    lastToken := tokens[len(tokens) - 1]
-    return strings.TrimSuffix(lastToken, "\\n\"}")
+    return tokens[len(tokens) - 1]
+}
+
+// Clean unwanted characters in incoming messages
+func cleanMessage(s string) string {
+        safe := bashColorRegex.ReplaceAllString(s, "")
+        return strings.TrimSpace(safe)
 }

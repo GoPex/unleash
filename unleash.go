@@ -5,33 +5,44 @@ import (
 
     // Minimalist http framework
     "github.com/gin-gonic/gin"
-
-    // Automatic parse of the configuration
-    "github.com/kelseyhightower/envconfig"
 )
 
+// Global read only variable to be used to access global configuration
 var (
-    Config Specification
+    Config *Specification
 )
 
-type Specification struct {
-    WorkingDirectory string `envconfig:"working_directory" default:"/tmp"`
-}
-
-func Run() {
+// Initializers to be executed before the application runs
+func initialize(config * Specification) {
     // Set the log level to debug
     log.SetLevel(log.DebugLevel)
 
-    // Gather the configuration
-    if err := envconfig.Process("unleash", &Config); err != nil {
+    // Print all configuration variables
+    config.Describe()
+
+    // Assign configuration globally
+    Config = config
+}
+
+// Launch the application based on the gin http framework
+func Run() {
+    // Parse the configuration
+    config, err := ParseConfiguration()
+    if err != nil {
         log.Fatal(err)
+        panic("Not able to parse the configuration ! Cause: " + err.Error())
     }
+
+    // Initialize the application
+    initialize(&config)
 
     // Create a default gin stack
     r := gin.Default()
 
     // Routes
-    r.POST("/events/github/push", githubPush)
+    // Github push event
+    githubEvents := r.Group("/events/github", GithubHmacAuthenticator())
+    githubEvents.POST("/push", githubPush)
 
     // Unleash!
     r.Run() // listen and serve on port defined by environment variable PORT
