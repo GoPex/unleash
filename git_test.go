@@ -5,7 +5,7 @@ import (
     "testing"
 
     // Unleash package to test
-    "bitbucket.org/gopex/unleash"
+    "github.com/GoPex/unleash"
 )
 
 // Test the Clone function of the git helpers

@@ -60,7 +60,13 @@ func GithubHmacAuthenticator() gin.HandlerFunc {
     return func(c *gin.Context) {
         // Authenticate the request
         if err := verifySignature(c); err != nil {
-            log.Warn("Unauthorized request ! Cause: ", err)
+            log.WithFields(log.Fields{
+                "method":     c.Request.Method,
+                "path":       c.Request.URL.Path,
+                "ip":         c.ClientIP(),
+                "user-agent": c.Request.UserAgent(),
+                "status":     http.StatusUnauthorized,
+            }).Warn(err)
             c.AbortWithStatus(http.StatusUnauthorized)
         }
     }

@@ -8,7 +8,7 @@ import (
     "github.com/gin-gonic/gin"
 
     // Internal bindings
-    "bitbucket.org/gopex/unleash/bindings"
+    "github.com/GoPex/unleash/bindings"
 )
 
 // Controller for the POST events/github/push route. Based on the event received from Github, this will schedule a BuildAndPushFromRepository background job.

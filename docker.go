@@ -31,8 +31,6 @@ type MessageStream struct {
 
 // Send a PushImage request to the docker daemon
 func PushImage(imageRepository string) error {
-    log.Info("Pushing image ", imageRepository, " to the default registry ...")
-
     // Initialize a Docker client
     docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
 
@@ -44,26 +42,21 @@ func PushImage(imageRepository string) error {
         return err
     }
 
-    log.Info("Image ", imageRepository, " pushed to the default registry !")
-
     return nil
 }
 
 // Send a BuildImage request to the docker daemon by sending a tar
 // built with the given directory.
-func BuildFromDirectory(directoryPath string, imageRepository string) (string, error) {
-    log.Debug("Path to the directory ", directoryPath)
-
+func BuildFromDirectory(directoryPath string, imageRepository string, contextLogger *log.Entry) (string, error) {
     // Path to the tar of the repository
     directoryTarPath := directoryPath + ".tar"
-    log.Debug("Path to the tar of the directory ", directoryTarPath)
 
     // Create a tar from the repository
     targo.Create(directoryTarPath, directoryPath + "/")
     defer os.Remove(directoryTarPath)
 
     // Build the Dockerfile for the created tar containing the repository
-    id, err := BuildFromTar(directoryTarPath, imageRepository)
+    id, err := BuildFromTar(directoryTarPath, imageRepository, contextLogger)
     if err != nil {
         return "", err
     }
@@ -72,9 +65,7 @@ func BuildFromDirectory(directoryPath string, imageRepository string) (string, e
 }
 
 // Send a BuildImage request to the docker daemon by sending the given tar.
-func BuildFromTar(tarPath string, imageRepository string) (string, error) {
-    log.Info("Building Dockerfile for tar ", tarPath, " using tag ", imageRepository, " ...")
-
+func BuildFromTar(tarPath string, imageRepository string, contextLogger *log.Entry) (string, error) {
     // Initialize a Docker client
     docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
 
@@ -103,16 +94,16 @@ func BuildFromTar(tarPath string, imageRepository string) (string, error) {
         if err := jsonReader.Decode(&message); err == io.EOF {
             break
         } else if err != nil {
-            log.Error(err)
+            return "", errors.New("Error decoding incoming JSON from Docker, cause: " + err.Error())
         }
 
         if message.Stream != "" {
             message.Stream = cleanMessage(message.Stream)
-            log.Debug(message.Stream)
+            contextLogger.Debug(message.Stream)
         }
         if message.ErrorDetail.Message != "" {
             message.ErrorDetail.Message = cleanMessage(message.ErrorDetail.Message)
-            log.Error(message.ErrorDetail.Message)
+            contextLogger.Debug(message.ErrorDetail.Message)
             return "", errors.New(message.ErrorDetail.Message)
         }
     }
@@ -121,8 +112,6 @@ func BuildFromTar(tarPath string, imageRepository string) (string, error) {
     if message.Stream != "" && buildSuccessfulRegex.MatchString(message.Stream) {
         id = extractId(message.Stream)
     }
-
-    log.Info("Dockerfile for tar ", tarPath, " has been builded ", imageRepository, " with id ", id," !")
 
     return id, nil
 }

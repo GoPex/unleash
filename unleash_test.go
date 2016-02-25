@@ -6,7 +6,7 @@ import (
     "path/filepath"
 
     // Unleash package to test
-    "bitbucket.org/gopex/unleash"
+    "github.com/GoPex/unleash"
 )
 
 var (

@@ -1,7 +1,7 @@
 package main
 
 import (
-    "bitbucket.org/gopex/unleash"
+    "github.com/GoPex/unleash"
 )
 
 func main() {

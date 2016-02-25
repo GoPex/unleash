@@ -47,5 +47,5 @@ func Run() {
     r.POST("/events/bitbucket/push", bitbucketPush)
 
     // Unleash!
-    r.Run() // listen and serve on port defined by environment variable PORT
+    r.Run(":" + config.Port) // listen and serve on port defined by environment variable UNLEASH_PORT
 }
