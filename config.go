@@ -20,7 +20,7 @@ func (specification *Specification) Describe() {
 // Struct to hold the configuration of the application
 type Specification struct {
     Port             string
-    WorkingDirectory string `envconfig:"working_directory" default:"/tmp"`
+    WorkingDirectory string `envconfig:"working_directory"`
     RegistryURL      string `envconfig:"registry_url"`
     RegistryUsername string `envconfig:"registry_username"`
     RegistryPassword string `envconfig:"registry_password"`

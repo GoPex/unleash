@@ -1,6 +1,7 @@
 package unleash
 
 import (
+    "os"
     log "github.com/Sirupsen/logrus"
 
     // Minimalist http framework
@@ -16,6 +17,11 @@ var (
 func initialize(config * Specification) {
     // Set the log level to debug
     log.SetLevel(log.DebugLevel)
+
+    // Configure runtime based configuration default values
+    if config.WorkingDirectory == "" {
+        config.WorkingDirectory = os.TempDir()
+    }
 
     // Print all configuration variables
     config.Describe()
@@ -43,7 +49,7 @@ func Run() {
     githubEvents := r.Group("/events/github", GithubHmacAuthenticator())
     githubEvents.POST("/push", githubPush)
 
-    // Bitbucket push evet
+    // Bitbucket push event
     r.POST("/events/bitbucket/push", bitbucketPush)
 
     // Unleash!
