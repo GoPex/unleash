@@ -24,6 +24,8 @@ var (
         {"UNLEASH_REGISTRY_PASSWORD", "RegistryPassword", "password"},
         {"UNLEASH_REGISTRY_EMAIL", "RegistryEmail", "username@example.org"},
         {"UNLEASH_API_KEY", "ApiKey", "supersecret"},
+        {"UNLEASH_GIT_USERNAME", "GitUsername", "superuser"},
+        {"UNLEASH_GIT_PASSWORD", "GitPassword", "superpassword"},
     }
 )
 

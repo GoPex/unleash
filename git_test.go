@@ -12,7 +12,7 @@ import (
 func TestClone(t *testing.T) {
     defer os.RemoveAll(testDestinationPath + "_" + testRepositoryDefaultBranch)
 
-    if err := unleash.Clone(testRepositoryUrl, testDestinationPath + "_" + testRepositoryDefaultBranch, testRepositoryDefaultBranch); err != nil {
+    if _, err := unleash.Clone(testRepositoryUrl, testDestinationPath + "_" + testRepositoryDefaultBranch, testRepositoryDefaultBranch); err != nil {
         t.Error(err)
     }
 }
@@ -21,7 +21,16 @@ func TestClone(t *testing.T) {
 func TestCloneBranch(t *testing.T) {
     defer os.RemoveAll(testDestinationPath + "_" + testRepositoryNotDefaultBranch)
 
-    if err := unleash.Clone(testRepositoryUrl, testDestinationPath + "_" + testRepositoryNotDefaultBranch, testRepositoryNotDefaultBranch); err != nil {
+    if _, err := unleash.Clone(testRepositoryUrl, testDestinationPath + "_" + testRepositoryNotDefaultBranch, testRepositoryNotDefaultBranch); err != nil {
+        t.Error(err)
+    }
+}
+
+// Test the Clone function of the git helpers
+func TestClonePrivate(t *testing.T) {
+    defer os.RemoveAll(testDestinationPath + "_private")
+
+    if _, err := unleash.Clone(testPrivateRepositoryUrl, testDestinationPath + "_private", testRepositoryDefaultBranch); err != nil {
         t.Error(err)
     }
 }

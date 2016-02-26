@@ -14,18 +14,21 @@ func (specification *Specification) Describe() {
             "RegistryURL": specification.RegistryURL,
             "RegistryUsername": specification.RegistryUsername,
             "Port": specification.Port,
+            "GitUsername": specification.GitUsername,
         }).Info("Starting unleash")
 }
 
 // Struct to hold the configuration of the application
 type Specification struct {
-    Port             string
-    WorkingDirectory string `envconfig:"working_directory"`
-    RegistryURL      string `envconfig:"registry_url"`
-    RegistryUsername string `envconfig:"registry_username"`
-    RegistryPassword string `envconfig:"registry_password"`
-    RegistryEmail    string `envconfig:"registry_email"`
-    ApiKey           string `envconfig:"api_key"`
+    Port              string
+    WorkingDirectory  string `envconfig:"working_directory"`
+    RegistryURL       string `envconfig:"registry_url"`
+    RegistryUsername  string `envconfig:"registry_username"`
+    RegistryPassword  string `envconfig:"registry_password"`
+    RegistryEmail     string `envconfig:"registry_email"`
+    ApiKey            string `envconfig:"api_key"`
+    GitUsername       string `envconfig:"git_username"`
+    GitPassword       string `envconfig:"git_password"`
 }
 
 // Parse the configuration of Unleash based on environment variables

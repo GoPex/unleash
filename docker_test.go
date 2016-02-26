@@ -22,7 +22,7 @@ var (
 func TestBuildFromTar(t *testing.T) {
     defer dockerClient.RemoveImage(testImageRepository + ":fromTar", true)
 
-    id, err := unleash.BuildFromTar(testRepositoryTarPath, testImageRepository + ":fromTar")
+    id, err := unleash.BuildFromTar(testRepositoryTarPath, testImageRepository + ":fromTar", contextLogger)
     if err != nil {
         t.Error(err)
     }
@@ -33,7 +33,7 @@ func TestBuildFromTar(t *testing.T) {
 
 // Test unknown instruction error handling of the BuildFromTar function of the docker helpers
 func TestBuildFromTarUnknowInstruction(t *testing.T) {
-    id, err := unleash.BuildFromTar(testUnknowInstructionRepositoryTarPath , testImageRepository + ":buildError")
+    id, err := unleash.BuildFromTar(testUnknowInstructionRepositoryTarPath , testImageRepository + ":buildError", contextLogger)
     if err == nil {
         t.Error("No error returned ! It should return an error as the build should fail !")
     }
@@ -44,7 +44,7 @@ func TestBuildFromTarUnknowInstruction(t *testing.T) {
 
 // Test non zero code error handling of the BuildFromTar function of the docker helpers
 func TestBuildFromTarNonZeroCode(t *testing.T) {
-    id, err := unleash.BuildFromTar(testNonZeroCodeRepositoryTarPath, testImageRepository + ":buildError")
+    id, err := unleash.BuildFromTar(testNonZeroCodeRepositoryTarPath, testImageRepository + ":buildError", contextLogger)
     if err == nil {
         t.Error("No error returned ! It should return an error as the build should fail !")
     }
@@ -59,7 +59,7 @@ func TestBuildFromDirectory(t *testing.T) {
     defer os.RemoveAll(testRepositoryExtracted)
 
     targo.Extract(testRepositoryExtracted, testRepositoryTarPath)
-    id, err := unleash.BuildFromDirectory(testRepositoryExtracted, testImageRepository + ":fromDirectory")
+    id, err := unleash.BuildFromDirectory(testRepositoryExtracted, testImageRepository + ":fromDirectory", contextLogger)
     if err != nil {
         t.Error(err)
     }
@@ -73,7 +73,7 @@ func TestPushImage(t *testing.T) {
     defer dockerClient.RemoveImage(testImageRepository + ":testPush", true)
 
     // It's not ideal to rely on our function for this test but its simpler for now
-    _, err := unleash.BuildFromTar(testRepositoryTarPath, testImageRepository + ":testPush")
+    _, err := unleash.BuildFromTar(testRepositoryTarPath, testImageRepository + ":testPush", contextLogger)
     if err != nil {
         t.Error(err)
     } else {
