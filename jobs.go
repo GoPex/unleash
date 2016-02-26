@@ -11,7 +11,7 @@ import (
 
 // Jobs to build a Docker image from a Dockerfile coming from a repository and push
 // it to the registry
-func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string, branch string, commit string) error {
+func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string, branch string, commit string, token string) error {
     contextLogger := log.WithFields(log.Fields{
             "repository_url": repositoryUrl,
             "repository": repositoryFullName,
@@ -28,7 +28,7 @@ func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string,
     fullWorkingDirectory := filepath.Join(uniqueWorkingDirectory, repositoryFullName, branch, commit)
 
     // Clone the repository
-    if _, err := Clone(repositoryUrl, fullWorkingDirectory, branch); err != nil {
+    if _, err := Clone(repositoryUrl, fullWorkingDirectory, branch, token); err != nil {
         contextLogger.Error("Error cloning, cause: ", err)
         return err
     }

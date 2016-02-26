@@ -7,12 +7,13 @@ import (
 
 // Git helpers function, clone a repository from the specified url,
 // to the specified path and checkout it to the specified branch.
-func Clone(repositoryUrl string, destinationPath string, branch string) (string, error) {
+func Clone(repositoryUrl string, destinationPath string, branch string, token string) (string, error) {
     // Preparing the clone call
     opts := git.CloneOptions{CheckoutBranch: branch}
 
     // Cloning the repository
-    repo, err := git.Clone(repositoryUrl, destinationPath, &opts)
+    //repo, err := git.Clone(repositoryUrl, destinationPath, &opts)
+    repo, err := git.Clone("https://x-token-auth:" + token + "@bitbucket.org/gopex/beekeeper.git", destinationPath, &opts)
     if err != nil {
         return "", err
     }

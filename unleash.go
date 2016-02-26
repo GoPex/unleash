@@ -52,6 +52,10 @@ func Run() {
     // Bitbucket push event
     r.POST("/events/bitbucket/push", bitbucketPush)
 
+    // Testing OAuth2
+    r.GET("/bitbucket/oauth2callback", bitbucketOAuthCallback)
+    r.GET("/bitbucket/login", handleBitbucketLogin)
+
     // Unleash!
     r.Run(":" + config.Port) // listen and serve on port defined by environment variable UNLEASH_PORT
 }
