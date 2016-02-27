@@ -22,11 +22,18 @@ var (
 )
 
 type MessageStream struct {
-    Stream      string `json:"stream"`
     Error       string `json:"error"`
     ErrorDetail struct {
         Message string `json:"message"`
     } `json:"errorDetail"`
+    ID             string `json:"id"`
+    Progress       string `json:"progress"`
+    ProgressDetail struct {
+        Current int `json:"current"`
+        Total   int `json:"total"`
+    } `json:"progressDetail"`
+    Status      string `json:"status"`
+    Stream      string `json:"stream"`
 }
 
 // Send a PushImage request to the docker daemon
@@ -87,30 +94,50 @@ func BuildFromTar(tarPath string, imageRepository string, contextLogger *log.Ent
         return "", err
     }
 
+    // Hold the last stream message in a string in order to extract the id at the end of the build
+    var lastStreamMessage string
+
     // Capture the build output and wait its end before continuing, get the image id at the end
     jsonReader := json.NewDecoder(reader)
     var message MessageStream
+
     for {
+        // Decode incoming stream directly in JSON
         if err := jsonReader.Decode(&message); err == io.EOF {
             break
         } else if err != nil {
             return "", errors.New("Error decoding incoming JSON from Docker, cause: " + err.Error())
         }
 
+        // Check for stream feed
         if message.Stream != "" {
-            message.Stream = cleanMessage(message.Stream)
-            contextLogger.Debug(message.Stream)
+            // Save the stream message for id extraction later on
+            lastStreamMessage = cleanMessage(message.Stream)
+            contextLogger.Debug(lastStreamMessage)
         }
+
+        // Check for status feed
+        if message.Status != "" {
+            contextLogger.Debug(message.Status, " ", message.ID, " ", message.Progress)
+        }
+
+        // Check for errors feed
         if message.ErrorDetail.Message != "" {
-            message.ErrorDetail.Message = cleanMessage(message.ErrorDetail.Message)
-            contextLogger.Debug(message.ErrorDetail.Message)
-            return "", errors.New(message.ErrorDetail.Message)
+            errorDetailMessage := strings.TrimSpace(message.ErrorDetail.Message)
+            contextLogger.Debug(errorDetailMessage)
+            return "", errors.New(errorDetailMessage)
         }
+
+        // Reset the message stream struct to avoid keeping old messages
+        message = MessageStream{}
     }
 
+    // Extract the ID of the image built from the last stream message of the Docker daemon
     var id string
-    if message.Stream != "" && buildSuccessfulRegex.MatchString(message.Stream) {
-        id = extractId(message.Stream)
+    if lastStreamMessage != "" && buildSuccessfulRegex.MatchString(lastStreamMessage) {
+        id = extractId(lastStreamMessage)
+    } else {
+        return "", errors.New("No id found at the end of the build")
     }
 
     return id, nil
@@ -122,8 +149,8 @@ func extractId(message string) string {
     return tokens[len(tokens) - 1]
 }
 
-// Clean unwanted characters in incoming messages
+// Clean unwanted \n in incoming messages, needed for stream feed becasue
+// sometime the \n is not the last character, the color code is
 func cleanMessage(s string) string {
-        safe := bashColorRegex.ReplaceAllString(s, "")
-        return strings.TrimSpace(safe)
+    return strings.Replace(s, "\n", "", -1)
 }
