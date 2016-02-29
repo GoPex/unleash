@@ -15,15 +15,15 @@ import (
 // Handler for the POST /events/github/push route. Based on the event received from Github, this will schedule a BuildAndPushFromRepository background job.
 func githubPushHandler(c *gin.Context) {
 	// Parse incomming JSON from github
-	var json bindings.GithubPushEvent
-	if c.BindJSON(&json) == nil {
+	var pushEvent bindings.GithubPushEvent
+	if c.BindJSON(&pushEvent) == nil {
 		// Get the branch name from the JSON "ref" attribute
-		tokens := strings.Split(json.Ref, "/")
+		tokens := strings.Split(pushEvent.Ref, "/")
 		branch := tokens[len(tokens)-1]
 		// Launch the build in background
-		go BuildAndPushFromRepository(json.Repository.CloneURL, json.Repository.FullName, branch, json.HeadCommit.Id)
+		go BuildAndPushFromRepository(pushEvent.Repository.CloneURL, pushEvent.Repository.FullName, branch, pushEvent.HeadCommit.Id)
 		// Render status OK (200)
-		c.JSON(http.StatusOK, gin.H{"status": "Processing Github push event for commit " + json.HeadCommit.Id + " on branch " + branch + " of the repository " + json.Repository.FullName + "."})
+		c.JSON(http.StatusOK, gin.H{"status": "Processing Github push event for commit " + pushEvent.HeadCommit.Id + " on branch " + branch + " of the repository " + pushEvent.Repository.FullName + "."})
 	} else {
 		// Render status BadRequest (400)
 		c.JSON(http.StatusBadRequest, gin.H{"status": "JSON binding failed !"})
@@ -33,14 +33,14 @@ func githubPushHandler(c *gin.Context) {
 // Handler for the POST /events/bitbucket/push route. Based on the event received from Bitbucket, this will schedule a BuildAndPushFromRepository background job.
 func bitbucketPushHandler(c *gin.Context) {
 	// Parse incomming JSON from github
-	var json bindings.BitbucketPushEvent
-	if c.BindJSON(&json) == nil {
-		for _, change := range json.Push.Changes {
+	var pushEvent bindings.BitbucketPushEvent
+	if c.BindJSON(&pushEvent) == nil {
+		for _, change := range pushEvent.Push.Changes {
 			// Launch the build in background
-			go BuildAndPushFromRepository(json.Repository.Links.HTML.Href, json.Repository.FullName, change.New.Name, change.New.Target.Hash)
+			go BuildAndPushFromRepository(pushEvent.Repository.Links.HTML.Href, pushEvent.Repository.FullName, change.New.Name, change.New.Target.Hash)
 		}
 		// Render status OK (200)
-		c.JSON(http.StatusOK, gin.H{"status": "Processing Bitbucket push event for commit"})
+		c.JSON(http.StatusOK, gin.H{"status": "Processing Bitbucket push event"})
 	} else {
 		// Render status BadRequest (400)
 		c.JSON(http.StatusBadRequest, gin.H{"status": "JSON binding failed !"})

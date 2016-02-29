@@ -51,7 +51,8 @@ func Run() {
 	githubEvents.POST("/push", githubPushHandler)
 
 	// Bitbucket push event
-	r.POST("/events/bitbucket/push", bitbucketPushHandler)
+	bitbucketEvents := r.Group("/events/bitbucket", BitbucketHmacAuthenticator())
+	bitbucketEvents.POST("/push", bitbucketPushHandler)
 
 	// Info routes
 	info := r.Group("/info")

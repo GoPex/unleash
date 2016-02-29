@@ -18,6 +18,7 @@ var (
 	gopexBitbucketUrl = "https://bitbucket.org/gopex"
 
 	testRepositoryUrl                      = gopexGithubUrl + "/unleash_test_repository.git"
+	testRepositoryUrlBitbucket             = gopexBitbucketUrl + "/unleash_test_repository.git"
 	testPrivateRepositoryUrl               = gopexBitbucketUrl + "/unleash_test_repository_private.git"
 	testDestinationPath                    = filepath.Join(workingDirectory, "unleash_test_repository")
 	testRepositoryTarPath                  = filepath.Join(dataDirectory, "unleash_test_repository.tar")
