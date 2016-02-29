@@ -5,14 +5,14 @@ import (
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-    "strings"
-    "encoding/json"
+	"strings"
 
-    "github.com/GoPex/unleash/bindings"
+	"github.com/GoPex/unleash/bindings"
 
 	// Minimalist http framework
 	"github.com/gin-gonic/gin"
@@ -96,31 +96,31 @@ func verifyBitbucketSignature(c *gin.Context) error {
 	buff := bytes.NewBuffer(body)
 	c.Request.Body = ioutil.NopCloser(buff)
 
-    // Convert payload to JSON
+	// Convert payload to JSON
 	var pushEvent bindings.BitbucketPushEvent
-    err = json.Unmarshal(body, &pushEvent)
-    if err != nil {
-	    c.AbortWithStatus(http.StatusUnauthorized)
-        return err
-    }
+	err = json.Unmarshal(body, &pushEvent)
+	if err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return err
+	}
 
-    // Check if the repository in the incoming push event is
-    // registred
-    unauthorized := true
-    repositoryToBuild := pushEvent.Repository.Links.HTML.Href
+	// Check if the repository in the incoming push event is
+	// registred
+	unauthorized := true
+	repositoryToBuild := pushEvent.Repository.Links.HTML.Href
 	tokens := strings.Split(Config.BitbucketRepositories, ",")
-    for _, registredRepositoryURL := range tokens {
-        if repositoryToBuild == registredRepositoryURL {
-            unauthorized = false
-        }
-    }
+	for _, registredRepositoryURL := range tokens {
+		if repositoryToBuild == registredRepositoryURL {
+			unauthorized = false
+		}
+	}
 
-    if unauthorized {
-        return errors.New("Unknown repository url " + repositoryToBuild + " coming from push event !")
-    }
+	if unauthorized {
+		return errors.New("Unknown repository url " + repositoryToBuild + " coming from push event !")
+	}
 
 	// Signatures matches !
-    return nil
+	return nil
 }
 
 // Gin compatible middleware to check incoming request's signature
