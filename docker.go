@@ -36,6 +36,29 @@ type MessageStream struct {
     Stream      string `json:"stream"`
 }
 
+// Send a Get _ping request to the docker daemon
+func Ping() (string, error) {
+    docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
+    pong, err := docker.Ping()
+
+    if err != nil {
+        return "NOK", err
+    }
+
+    return pong, nil
+}
+
+// Send a Get version request to the docker daemon
+func Version() (string, error) {
+    docker, err := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
+    version, err := docker.Version()
+    if err != nil {
+        return "", err
+    }
+
+    return version.Version, nil
+}
+
 // Send a PushImage request to the docker daemon
 func PushImage(imageRepository string) error {
     // Initialize a Docker client

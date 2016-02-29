@@ -11,6 +11,7 @@ import (
 // Global read only variable to be used to access global configuration
 var (
     Config *Specification
+    UnleashVersion = "0.1.0"
 )
 
 // Initializers to be executed before the application runs
@@ -47,10 +48,16 @@ func Run() {
     // Routes
     // Github push event
     githubEvents := r.Group("/events/github", GithubHmacAuthenticator())
-    githubEvents.POST("/push", githubPush)
+    githubEvents.POST("/push", githubPushHandler)
 
     // Bitbucket push event
-    r.POST("/events/bitbucket/push", bitbucketPush)
+    r.POST("/events/bitbucket/push", bitbucketPushHandler)
+
+    // Info routes
+    info := r.Group("/info")
+    info.GET("/ping", pingHandler)
+    info.GET("/status", statusHandler)
+    info.GET("/version", versionHandler)
 
     // Unleash!
     r.Run(":" + config.Port) // listen and serve on port defined by environment variable UNLEASH_PORT

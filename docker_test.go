@@ -3,6 +3,7 @@ package unleash_test
 import (
     "os"
     "testing"
+    "errors"
 
     // go client for docker
     "github.com/GoPex/dockerclient"
@@ -80,5 +81,27 @@ func TestPushImage(t *testing.T) {
         if err := unleash.PushImage(testImageRepository + ":testPush"); err != nil {
             t.Error(err)
         }
+    }
+}
+
+// Test the Ping function of the docker helpers
+func TestPing(t *testing.T) {
+    pong, err := unleash.Ping()
+    if err != nil {
+         t.Error(err)
+    }
+    if pong != "OK" {
+        t.Error(errors.New("Pong response is not OK but " + pong))
+    }
+}
+
+// Test the Version function of the Docker helpers
+func TestVersion(t *testing.T) {
+    version, err := unleash.Version()
+    if err != nil {
+        t.Error(err)
+    }
+    if version == "" {
+        t.Error(errors.New("Version is empty !"))
     }
 }
