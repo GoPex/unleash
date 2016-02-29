@@ -15,6 +15,7 @@ func (specification *Specification) Describe() {
 		"RegistryUsername": specification.RegistryUsername,
 		"Port":             specification.Port,
 		"GitUsername":      specification.GitUsername,
+		"BitbucketRepositories":      specification.BitbucketRepositories,
 	}).Info("Starting unleash")
 }
 
@@ -29,6 +30,7 @@ type Specification struct {
 	ApiKey           string `envconfig:"api_key"`
 	GitUsername      string `envconfig:"git_username"`
 	GitPassword      string `envconfig:"git_password"`
+	BitbucketRepositories string `envconfig:"bitbucket_repositories"`
 }
 
 // Parse the configuration of Unleash based on environment variables
