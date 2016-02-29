@@ -1,17 +1,17 @@
 package unleash_test
 
 import (
-    "testing"
+	"testing"
 
-    // Unleash package to test
-    "github.com/GoPex/unleash"
+	// Unleash package to test
+	"github.com/GoPex/unleash"
 )
 
 // Test the BuildAndPushFromRepository job
 func TestBuildAndPushFromRepository(t *testing.T) {
-    defer dockerClient.RemoveImage(testImageRepository + ":latest", true)
+	defer dockerClient.RemoveImage(testImageRepository+":latest", true)
 
-    if err := unleash.BuildAndPushFromRepository(testRepositoryUrl, testRepositoryFullName, testRepositoryDefaultBranch, testRepositoryCommitId); err != nil {
-        t.Error(err)
-    }
+	if err := unleash.BuildAndPushFromRepository(testRepositoryUrl, testRepositoryFullName, testRepositoryDefaultBranch, testRepositoryCommitId); err != nil {
+		t.Error(err)
+	}
 }
