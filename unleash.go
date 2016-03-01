@@ -43,23 +43,23 @@ func Run() {
 	initialize(&config)
 
 	// Create a default gin stack
-	r := gin.Default()
+	router := gin.Default()
 
 	// Routes
 	// Github push event
-	githubEvents := r.Group("/events/github", GithubHmacAuthenticator())
-	githubEvents.POST("/push", githubPushHandler)
+	githubEvents := router.Group("/events/github", GithubHmacAuthenticator())
+	githubEvents.POST("/push", GithubPushHandler)
 
 	// Bitbucket push event
-	bitbucketEvents := r.Group("/events/bitbucket", BitbucketHmacAuthenticator())
-	bitbucketEvents.POST("/push", bitbucketPushHandler)
+	bitbucketEvents := router.Group("/events/bitbucket", BitbucketHmacAuthenticator())
+	bitbucketEvents.POST("/push", BitbucketPushHandler)
 
 	// Info routes
-	info := r.Group("/info")
-	info.GET("/ping", pingHandler)
-	info.GET("/status", statusHandler)
-	info.GET("/version", versionHandler)
+	info := router.Group("/info")
+	info.GET("/ping", PingHandler)
+	info.GET("/status", StatusHandler)
+	info.GET("/version", VersionHandler)
 
 	// Unleash!
-	r.Run(":" + config.Port) // listen and serve on port defined by environment variable UNLEASH_PORT
+	router.Run(":" + config.Port) // listen and serve on port defined by environment variable UNLEASH_PORT
 }

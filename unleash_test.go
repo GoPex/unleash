@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gin-gonic/gin"
 	// Unleash package to test
 	"github.com/GoPex/unleash"
 )
@@ -32,13 +33,22 @@ var (
 	testRepositoryNotDefaultBranch = "testing_branch_push_event"
 	testRepositoryCommitId         = "bb9a1688dec2d9d8cb24136a41e9bc62ad1d9675"
 
+    testGithubPushEventJSON = filepath.Join(dataDirectory, "github_push_event.json")
+    testBitbucketPushEventJSON = filepath.Join(dataDirectory, "bitbucket_push_event.json")
+
 	contextLogger = log.WithFields(log.Fields{
 		"environment": "test",
 	})
 )
 
 func init() {
+    // Force gin in test mode
+    gin.SetMode(gin.TestMode)
+
+    // Force logrus to log only from warnings
 	log.SetLevel(log.WarnLevel)
+
+    // Mock Unleash configuration
 	unleash.Config = &unleash.Specification{WorkingDirectory: workingDirectory,
 		RegistryURL:      "localhost:5000",
 		RegistryUsername: "albinos",

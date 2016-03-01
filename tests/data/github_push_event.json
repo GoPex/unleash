@@ -1,0 +1,176 @@
+{
+  "ref": "refs/heads/testing_branch_push_event",
+  "before": "a2278e9d715a4e12defde2561fb6bd89cf7fe08a",
+  "after": "1b852f2d62c85daede07a9a336665c111406f95a",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/GoPex/unleash_test_repository/compare/a2278e9d715a...1b852f2d62c8",
+  "commits": [
+    {
+      "id": "1b852f2d62c85daede07a9a336665c111406f95a",
+      "distinct": true,
+      "message": "Testing cloning other branch than master",
+      "timestamp": "2016-02-25T14:59:43+01:00",
+      "url": "https://github.com/GoPex/unleash_test_repository/commit/1b852f2d62c85daede07a9a336665c111406f95a",
+      "author": {
+        "name": "Albin Gilles",
+        "email": "gilles.albin@gmail.com",
+        "username": "AlbinOS"
+      },
+      "committer": {
+        "name": "Albin Gilles",
+        "email": "gilles.albin@gmail.com",
+        "username": "AlbinOS"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "Dockerfile"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "1b852f2d62c85daede07a9a336665c111406f95a",
+    "distinct": true,
+    "message": "Testing cloning other branch than master",
+    "timestamp": "2016-02-25T14:59:43+01:00",
+    "url": "https://github.com/GoPex/unleash_test_repository/commit/1b852f2d62c85daede07a9a336665c111406f95a",
+    "author": {
+      "name": "Albin Gilles",
+      "email": "gilles.albin@gmail.com",
+      "username": "AlbinOS"
+    },
+    "committer": {
+      "name": "Albin Gilles",
+      "email": "gilles.albin@gmail.com",
+      "username": "AlbinOS"
+    },
+    "added": [
+
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+      "Dockerfile"
+    ]
+  },
+  "repository": {
+    "id": 52015894,
+    "name": "unleash_test_repository",
+    "full_name": "GoPex/unleash_test_repository",
+    "owner": {
+      "name": "GoPex",
+      "email": "gilles.albin@gmail.com"
+    },
+    "private": false,
+    "html_url": "https://github.com/GoPex/unleash_test_repository",
+    "description": "Test repositoryfor unleash",
+    "fork": false,
+    "url": "https://github.com/GoPex/unleash_test_repository",
+    "forks_url": "https://api.github.com/repos/GoPex/unleash_test_repository/forks",
+    "keys_url": "https://api.github.com/repos/GoPex/unleash_test_repository/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/GoPex/unleash_test_repository/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/GoPex/unleash_test_repository/teams",
+    "hooks_url": "https://api.github.com/repos/GoPex/unleash_test_repository/hooks",
+    "issue_events_url": "https://api.github.com/repos/GoPex/unleash_test_repository/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/GoPex/unleash_test_repository/events",
+    "assignees_url": "https://api.github.com/repos/GoPex/unleash_test_repository/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/GoPex/unleash_test_repository/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/GoPex/unleash_test_repository/tags",
+    "blobs_url": "https://api.github.com/repos/GoPex/unleash_test_repository/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/GoPex/unleash_test_repository/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/GoPex/unleash_test_repository/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/GoPex/unleash_test_repository/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/GoPex/unleash_test_repository/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/GoPex/unleash_test_repository/languages",
+    "stargazers_url": "https://api.github.com/repos/GoPex/unleash_test_repository/stargazers",
+    "contributors_url": "https://api.github.com/repos/GoPex/unleash_test_repository/contributors",
+    "subscribers_url": "https://api.github.com/repos/GoPex/unleash_test_repository/subscribers",
+    "subscription_url": "https://api.github.com/repos/GoPex/unleash_test_repository/subscription",
+    "commits_url": "https://api.github.com/repos/GoPex/unleash_test_repository/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/GoPex/unleash_test_repository/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/GoPex/unleash_test_repository/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/GoPex/unleash_test_repository/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/GoPex/unleash_test_repository/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/GoPex/unleash_test_repository/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/GoPex/unleash_test_repository/merges",
+    "archive_url": "https://api.github.com/repos/GoPex/unleash_test_repository/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/GoPex/unleash_test_repository/downloads",
+    "issues_url": "https://api.github.com/repos/GoPex/unleash_test_repository/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/GoPex/unleash_test_repository/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/GoPex/unleash_test_repository/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/GoPex/unleash_test_repository/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/GoPex/unleash_test_repository/labels{/name}",
+    "releases_url": "https://api.github.com/repos/GoPex/unleash_test_repository/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/GoPex/unleash_test_repository/deployments",
+    "created_at": 1455808237,
+    "updated_at": "2016-02-18T15:12:36Z",
+    "pushed_at": 1456408787,
+    "git_url": "git://github.com/GoPex/unleash_test_repository.git",
+    "ssh_url": "git@github.com:GoPex/unleash_test_repository.git",
+    "clone_url": "https://github.com/GoPex/unleash_test_repository.git",
+    "svn_url": "https://github.com/GoPex/unleash_test_repository",
+    "homepage": "",
+    "size": 16,
+    "stargazers_count": 0,
+    "watchers_count": 0,
+    "language": null,
+    "has_issues": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "open_issues_count": 0,
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 0,
+    "default_branch": "master",
+    "stargazers": 0,
+    "master_branch": "master",
+    "organization": "GoPex"
+  },
+  "pusher": {
+    "name": "AlbinOS",
+    "email": "gilles.albin@gmail.com"
+  },
+  "organization": {
+    "login": "GoPex",
+    "id": 16843488,
+    "url": "https://api.github.com/orgs/GoPex",
+    "repos_url": "https://api.github.com/orgs/GoPex/repos",
+    "events_url": "https://api.github.com/orgs/GoPex/events",
+    "hooks_url": "https://api.github.com/orgs/GoPex/hooks",
+    "issues_url": "https://api.github.com/orgs/GoPex/issues",
+    "members_url": "https://api.github.com/orgs/GoPex/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/GoPex/public_members{/member}",
+    "avatar_url": "https://avatars.githubusercontent.com/u/16843488?v=3",
+    "description": "GoPex DeV."
+  },
+  "sender": {
+    "login": "AlbinOS",
+    "id": 1978405,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1978405?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/AlbinOS",
+    "html_url": "https://github.com/AlbinOS",
+    "followers_url": "https://api.github.com/users/AlbinOS/followers",
+    "following_url": "https://api.github.com/users/AlbinOS/following{/other_user}",
+    "gists_url": "https://api.github.com/users/AlbinOS/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/AlbinOS/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/AlbinOS/subscriptions",
+    "organizations_url": "https://api.github.com/users/AlbinOS/orgs",
+    "repos_url": "https://api.github.com/users/AlbinOS/repos",
+    "events_url": "https://api.github.com/users/AlbinOS/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/AlbinOS/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
