@@ -35,14 +35,14 @@ func Clone(repositoryUrl string, destinationPath string, branch string) (string,
 
 // Callback called by libgit2 if remote repository ask for an authentication
 func makeCredentialsCallback(username, password string) git.CredentialsCallback {
-    // If we're trying it means the credentials are invalid
-    called := false
-    return func(url string, username_from_url string, allowed_types git.CredType) (git.ErrorCode, *git.Cred) {
-        if called {
-            return git.ErrUser, nil
-        }
-        called = true
-        errCode, cred := git.NewCredUserpassPlaintext(username, password)
-        return git.ErrorCode(errCode), &cred
-    }
+	// If we're trying it means the credentials are invalid
+	called := false
+	return func(url string, username_from_url string, allowed_types git.CredType) (git.ErrorCode, *git.Cred) {
+		if called {
+			return git.ErrUser, nil
+		}
+		called = true
+		errCode, cred := git.NewCredUserpassPlaintext(username, password)
+		return git.ErrorCode(errCode), &cred
+	}
 }
