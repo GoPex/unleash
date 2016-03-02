@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"testing"
 
-	// Unleash package to test
 	"github.com/GoPex/unleash"
 )
 
@@ -18,6 +17,7 @@ type configTest struct {
 var (
 	configTests = []configTest{
 		{"UNLEASH_PORT", "Port", "3000"},
+		{"UNLEASH_LOG_LEVEL", "LogLevel", "debug"},
 		{"UNLEASH_WORKING_DIRECTORY", "WorkingDirectory", "/tmp"},
 		{"UNLEASH_REGISTRY_URL", "RegistryURL", "localhost:5000"},
 		{"UNLEASH_REGISTRY_USERNAME", "RegistryUsername", "username"},

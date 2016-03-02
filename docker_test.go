@@ -2,16 +2,11 @@ package unleash_test
 
 import (
 	"errors"
+	"github.com/GoPex/dockerclient"
+	"github.com/Rolinh/targo"
 	"os"
 	"testing"
 
-	// go client for docker
-	"github.com/GoPex/dockerclient"
-
-	// Tar utilities for go
-	"github.com/Rolinh/targo"
-
-	// Unleash package to test
 	"github.com/GoPex/unleash"
 )
 
@@ -71,14 +66,15 @@ func TestBuildFromDirectory(t *testing.T) {
 
 // Test the PushImage function of the docker helpers
 func TestPushImage(t *testing.T) {
-	defer dockerClient.RemoveImage(testImageRepository+":testPush", true)
+	testImageFullRepository := testDockerRegistryUrl + "/" + testImageRepository + ":testPush"
+	defer dockerClient.RemoveImage(testImageFullRepository, true)
 
 	// It's not ideal to rely on our function for this test but its simpler for now
-	_, err := unleash.BuildFromTar(testRepositoryTarPath, testImageRepository+":testPush", contextLogger)
+	_, err := unleash.BuildFromTar(testRepositoryTarPath, testImageFullRepository, contextLogger)
 	if err != nil {
 		t.Error(err)
 	} else {
-		if err := unleash.PushImage(testImageRepository + ":testPush"); err != nil {
+		if err := unleash.PushImage(testImageFullRepository); err != nil {
 			t.Error(err)
 		}
 	}

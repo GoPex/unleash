@@ -8,14 +8,12 @@ import (
 	"encoding/json"
 	"errors"
 	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
 	"github.com/GoPex/unleash/bindings"
-
-	// Minimalist http framework
-	"github.com/gin-gonic/gin"
 )
 
 // Test the sha1 signature headers of the incoming request using

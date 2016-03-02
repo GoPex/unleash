@@ -1,0 +1,287 @@
+{
+    "repository": {
+        "type": "repository",
+        "full_name": "gopex/unleash_test_repository",
+        "uuid": "{f5fd1396-d16e-4fca-820d-ad4e687d0977}",
+        "is_private": false,
+        "owner": {
+            "display_name": "GoPex",
+            "type": "team",
+            "uuid": "{a6059f27-0d5a-4fb6-8e4c-7c9d03558bcb}",
+            "links": {
+                "html": {
+                    "href": "https://bitbucket.org/gopex/"
+                },
+                "self": {
+                    "href": "https://api.bitbucket.org/2.0/teams/gopex"
+                },
+                "avatar": {
+                    "href": "https://bitbucket.org/account/gopex/avatar/32/"
+                }
+            },
+            "username": "gopex"
+        },
+        "scm": "git",
+        "name": "unleash_test_repository",
+        "website": "",
+        "links": {
+            "html": {
+                "href": "https://bitbucket.org/gopex/unleash_test_repository"
+            },
+            "self": {
+                "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository"
+            },
+            "avatar": {
+                "href": "https://bitbucket.org/gopex/unleash_test_repository/avatar/32/"
+            }
+        }
+    },
+    "push": {
+        "changes": [
+            {
+                "new": {
+                    "repository": {
+                        "type": "repository",
+                        "name": "unleash_test_repository",
+                        "uuid": "{f5fd1396-d16e-4fca-820d-ad4e687d0977}",
+                        "links": {
+                            "html": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository"
+                            },
+                            "self": {
+                                "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository"
+                            },
+                            "avatar": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository/avatar/32/"
+                            }
+                        },
+                        "full_name": "gopex/unleash_test_repository"
+                    },
+                    "type": "branch",
+                    "name": "testing_branch_push_event",
+                    "target": {
+                        "date": "2016-02-25T18:47:44+00:00",
+                        "message": "Trigger trigger\n",
+                        "type": "commit",
+                        "author": {
+                            "raw": "Albin Gilles <gilles.albin@gmail.com>",
+                            "user": {
+                                "display_name": "Albin Gilles",
+                                "type": "user",
+                                "uuid": "{9e9e5d1d-ff9e-4d98-86e1-30b6f1b9e2ea}",
+                                "links": {
+                                    "html": {
+                                        "href": "https://bitbucket.org/AlbinOS/"
+                                    },
+                                    "self": {
+                                        "href": "https://api.bitbucket.org/2.0/users/AlbinOS"
+                                    },
+                                    "avatar": {
+                                        "href": "https://bitbucket.org/account/AlbinOS/avatar/32/"
+                                    }
+                                },
+                                "username": "AlbinOS"
+                            }
+                        },
+                        "parents": [
+                            {
+                                "type": "commit",
+                                "links": {
+                                    "html": {
+                                        "href": "https://bitbucket.org/gopex/unleash_test_repository/commits/1b852f2d62c85daede07a9a336665c111406f95a"
+                                    },
+                                    "self": {
+                                        "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commit/1b852f2d62c85daede07a9a336665c111406f95a"
+                                    }
+                                },
+                                "hash": "1b852f2d62c85daede07a9a336665c111406f95a"
+                            }
+                        ],
+                        "links": {
+                            "html": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository/commits/34fd8c7707cb9873950a964073684081f6f9a840"
+                            },
+                            "self": {
+                                "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commit/34fd8c7707cb9873950a964073684081f6f9a840"
+                            }
+                        },
+                        "hash": "34fd8c7707cb9873950a964073684081f6f9a840"
+                    },
+                    "links": {
+                        "commits": {
+                            "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commits/testing_branch_push_event"
+                        },
+                        "self": {
+                            "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/refs/branches/testing_branch_push_event"
+                        },
+                        "html": {
+                            "href": "https://bitbucket.org/gopex/unleash_test_repository/branch/testing_branch_push_event"
+                        }
+                    }
+                },
+                "truncated": false,
+                "created": false,
+                "closed": false,
+                "commits": [
+                    {
+                        "date": "2016-02-25T18:47:44+00:00",
+                        "message": "Trigger trigger\n",
+                        "type": "commit",
+                        "author": {
+                            "raw": "Albin Gilles <gilles.albin@gmail.com>",
+                            "user": {
+                                "display_name": "Albin Gilles",
+                                "type": "user",
+                                "uuid": "{9e9e5d1d-ff9e-4d98-86e1-30b6f1b9e2ea}",
+                                "links": {
+                                    "html": {
+                                        "href": "https://bitbucket.org/AlbinOS/"
+                                    },
+                                    "self": {
+                                        "href": "https://api.bitbucket.org/2.0/users/AlbinOS"
+                                    },
+                                    "avatar": {
+                                        "href": "https://bitbucket.org/account/AlbinOS/avatar/32/"
+                                    }
+                                },
+                                "username": "AlbinOS"
+                            }
+                        },
+                        "parents": [
+                            {
+                                "type": "commit",
+                                "links": {
+                                    "html": {
+                                        "href": "https://bitbucket.org/gopex/unleash_test_repository/commits/1b852f2d62c85daede07a9a336665c111406f95a"
+                                    },
+                                    "self": {
+                                        "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commit/1b852f2d62c85daede07a9a336665c111406f95a"
+                                    }
+                                },
+                                "hash": "1b852f2d62c85daede07a9a336665c111406f95a"
+                            }
+                        ],
+                        "links": {
+                            "html": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository/commits/34fd8c7707cb9873950a964073684081f6f9a840"
+                            },
+                            "self": {
+                                "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commit/34fd8c7707cb9873950a964073684081f6f9a840"
+                            }
+                        },
+                        "hash": "34fd8c7707cb9873950a964073684081f6f9a840"
+                    }
+                ],
+                "old": {
+                    "repository": {
+                        "type": "repository",
+                        "name": "unleash_test_repository",
+                        "uuid": "{f5fd1396-d16e-4fca-820d-ad4e687d0977}",
+                        "links": {
+                            "html": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository"
+                            },
+                            "self": {
+                                "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository"
+                            },
+                            "avatar": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository/avatar/32/"
+                            }
+                        },
+                        "full_name": "gopex/unleash_test_repository"
+                    },
+                    "type": "branch",
+                    "name": "testing_branch_push_event",
+                    "target": {
+                        "date": "2016-02-25T13:59:43+00:00",
+                        "message": "Testing cloning other branch than master\n",
+                        "type": "commit",
+                        "author": {
+                            "raw": "Albin Gilles <gilles.albin@gmail.com>",
+                            "user": {
+                                "display_name": "Albin Gilles",
+                                "type": "user",
+                                "uuid": "{9e9e5d1d-ff9e-4d98-86e1-30b6f1b9e2ea}",
+                                "links": {
+                                    "html": {
+                                        "href": "https://bitbucket.org/AlbinOS/"
+                                    },
+                                    "self": {
+                                        "href": "https://api.bitbucket.org/2.0/users/AlbinOS"
+                                    },
+                                    "avatar": {
+                                        "href": "https://bitbucket.org/account/AlbinOS/avatar/32/"
+                                    }
+                                },
+                                "username": "AlbinOS"
+                            }
+                        },
+                        "parents": [
+                            {
+                                "type": "commit",
+                                "links": {
+                                    "html": {
+                                        "href": "https://bitbucket.org/gopex/unleash_test_repository/commits/a2278e9d715a4e12defde2561fb6bd89cf7fe08a"
+                                    },
+                                    "self": {
+                                        "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commit/a2278e9d715a4e12defde2561fb6bd89cf7fe08a"
+                                    }
+                                },
+                                "hash": "a2278e9d715a4e12defde2561fb6bd89cf7fe08a"
+                            }
+                        ],
+                        "links": {
+                            "html": {
+                                "href": "https://bitbucket.org/gopex/unleash_test_repository/commits/1b852f2d62c85daede07a9a336665c111406f95a"
+                            },
+                            "self": {
+                                "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commit/1b852f2d62c85daede07a9a336665c111406f95a"
+                            }
+                        },
+                        "hash": "1b852f2d62c85daede07a9a336665c111406f95a"
+                    },
+                    "links": {
+                        "commits": {
+                            "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commits/testing_branch_push_event"
+                        },
+                        "self": {
+                            "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/refs/branches/testing_branch_push_event"
+                        },
+                        "html": {
+                            "href": "https://bitbucket.org/gopex/unleash_test_repository/branch/testing_branch_push_event"
+                        }
+                    }
+                },
+                "links": {
+                    "diff": {
+                        "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/diff/34fd8c7707cb9873950a964073684081f6f9a840..1b852f2d62c85daede07a9a336665c111406f95a"
+                    },
+                    "commits": {
+                        "href": "https://api.bitbucket.org/2.0/repositories/gopex/unleash_test_repository/commits?include=34fd8c7707cb9873950a964073684081f6f9a840&exclude=1b852f2d62c85daede07a9a336665c111406f95a"
+                    },
+                    "html": {
+                        "href": "https://bitbucket.org/gopex/unleash_test_repository/branches/compare/34fd8c7707cb9873950a964073684081f6f9a840..1b852f2d62c85daede07a9a336665c111406f95a"
+                    }
+                },
+                "forced": false
+            }
+        ]
+    },
+    "actor": {
+        "display_name": "Albin Gilles",
+        "type": "user",
+        "uuid": "{9e9e5d1d-ff9e-4d98-86e1-30b6f1b9e2ea}",
+        "links": {
+            "html": {
+                "href": "https://bitbucket.org/AlbinOS/"
+            },
+            "self": {
+                "href": "https://api.bitbucket.org/2.0/users/AlbinOS"
+            },
+            "avatar": {
+                "href": "https://bitbucket.org/account/AlbinOS/avatar/32/"
+            }
+        },
+        "username": "AlbinOS"
+    }
+}
