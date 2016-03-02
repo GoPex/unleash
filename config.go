@@ -8,10 +8,11 @@ import (
 // Log all variables parsed with envconfig
 func (specification *Specification) Describe() {
 	log.WithFields(log.Fields{
+		"Port":                  specification.Port,
+		"LogLevel": specification.LogLevel,
 		"WorkingDirectory":      specification.WorkingDirectory,
 		"RegistryURL":           specification.RegistryURL,
 		"RegistryUsername":      specification.RegistryUsername,
-		"Port":                  specification.Port,
 		"GitUsername":           specification.GitUsername,
 		"BitbucketRepositories": specification.BitbucketRepositories,
 	}).Info("Unleash initialized !")
@@ -20,6 +21,7 @@ func (specification *Specification) Describe() {
 // Struct to hold the configuration of the application
 type Specification struct {
 	Port                  string
+    LogLevel              string `envconfig:"log_level" default:"debug"`
 	WorkingDirectory      string `envconfig:"working_directory"`
 	RegistryURL           string `envconfig:"registry_url"`
 	RegistryUsername      string `envconfig:"registry_username"`

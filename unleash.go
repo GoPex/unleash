@@ -22,7 +22,11 @@ type Unleash struct {
 func (unleash *Unleash) Initialize(config *Specification) error {
 
 	// Set the log level to debug
-	log.SetLevel(log.DebugLevel)
+    logLevel, err := log.ParseLevel(config.LogLevel)
+    if err != nil {
+        return err
+    }
+    log.SetLevel(logLevel)
 
 	// Configure runtime based configuration default values
 	if config.WorkingDirectory == "" {
