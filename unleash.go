@@ -1,9 +1,14 @@
 package unleash
 
 import (
+	"bytes"
+	"archive/zip"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"io"
+	"net/http"
 	"os"
+	"fmt"
 )
 
 // Global read only variable to be used to access global configuration
@@ -45,6 +50,95 @@ func (unleash *Unleash) Initialize(config *Specification) error {
 	return nil
 }
 
+func test(c *gin.Context) {
+	url := "https://bitbucket.org/gopex/unleash_test_repository_private/get/testing_branch_push_event.zip"
+	res, err := http.Get(url)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+
+	buf := &bytes.Buffer{}
+
+	_, err = io.Copy(buf, res.Body)
+	if err != nil {
+		return
+	}
+
+	urlReader := bytes.NewReader(buf.Bytes())
+
+	zr, err := zip.NewReader(urlReader, int64(urlReader.Len()))
+	if err != nil {
+		log.Fatalf("Unable to read zip: %s", err)
+	}
+
+	if err := os.MkdirAll(target, 0755); err != nil {
+		return err
+	}
+
+	for _, file := range reader.File {
+		path := filepath.Join(target, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(path, file.Mode())
+			continue
+		}
+
+		fileReader, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer fileReader.Close()
+
+		targetFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		if err != nil {
+			return err
+		}
+		defer targetFile.Close()
+
+		if _, err := io.Copy(targetFile, fileReader); err != nil {
+			return err
+		}
+	}	
+
+}
+
+func unzip(archive string, target string) error {
+
+	if err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(target, 0755); err != nil {
+		return err
+	}
+
+	for _, file := range reader.File {
+		path := filepath.Join(target, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(path, file.Mode())
+			continue
+		}
+
+		fileReader, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer fileReader.Close()
+
+		targetFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		if err != nil {
+			return err
+		}
+		defer targetFile.Close()
+
+		if _, err := io.Copy(targetFile, fileReader); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // Initialize the Unleash application based on the gin http framework
 func New() *Unleash {
 
@@ -71,6 +165,8 @@ func New() *Unleash {
 	info.GET("/ping", PingHandler)
 	info.GET("/status", StatusHandler)
 	info.GET("/version", VersionHandler)
+
+	unleash.Engine.GET("/download", test)
 
 	return &unleash
 }
