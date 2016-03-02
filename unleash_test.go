@@ -4,10 +4,11 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"os"
 	"path/filepath"
-
 	"github.com/gin-gonic/gin"
-	// Unleash package to test
-	"github.com/GoPex/unleash"
+    "testing"
+    "reflect"
+
+    "github.com/GoPex/unleash"
 )
 
 var (
@@ -36,6 +37,8 @@ var (
 	testGithubPushEventJSON    = filepath.Join(dataDirectory, "github_push_event.json")
 	testBitbucketPushEventJSON = filepath.Join(dataDirectory, "bitbucket_push_event.json")
 
+    testDockerRegistryUrl = "localhost:5000"
+
 	contextLogger = log.WithFields(log.Fields{
 		"environment": "test",
 	})
@@ -50,11 +53,40 @@ func init() {
 
 	// Mock Unleash configuration
 	unleash.Config = &unleash.Specification{WorkingDirectory: workingDirectory,
-		RegistryURL:      "localhost:5000",
-		RegistryUsername: "albinos",
+		RegistryURL:      testDockerRegistryUrl,
+		RegistryUsername: "gopextest",
 		RegistryPassword: os.Getenv("UNLEASH_REGISTRY_PASSWORD"),
 		RegistryEmail:    "gilles.albin@gmail.com",
 		ApiKey:           "supersecret",
-		GitUsername:      "albinos",
+		GitUsername:      "gopextest",
 		GitPassword:      os.Getenv("UNLEASH_GIT_PASSWORD")}
 }
+
+func compareFunc(t *testing.T, a, b interface{}) {
+	sf1 := reflect.ValueOf(a)
+	sf2 := reflect.ValueOf(b)
+	if sf1.Pointer() != sf2.Pointer() {
+		t.Error("different functions")
+	}
+}
+
+func TestNew(t *testing.T) {
+    unleash := unleash.New()
+
+    if err := unleash.Initialize(unleash.Config); err != nil {
+        t.Errorf("Cannot initialize the application, cause: %s !", err.Error())
+    }
+
+    // gin.RoutesInfo
+    routesInfo := unleash.Engine.Routes()
+
+    for _, route := range routesInfo {
+        log.Info(route.Path," ", route.Method)
+    }
+}
+//RouteInfo{
+		//Method:  "GET",
+		//Path:    "/favicon.ico",
+		//Handler: "^(.*/vendor/)?github.com/gin-gonic/gin.handler_test1$",
+	//}
+

@@ -11,11 +11,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/GoPex/unleash/bindings"
-
-	// Minimalist http framework
 	"github.com/gin-gonic/gin"
+
+    "github.com/GoPex/unleash/bindings"
 )
 
 // Test the sha1 signature headers of the incoming request using

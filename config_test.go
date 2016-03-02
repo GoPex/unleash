@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"testing"
 
-	// Unleash package to test
 	"github.com/GoPex/unleash"
 )
 

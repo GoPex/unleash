@@ -3,19 +3,24 @@ package unleash
 import (
 	log "github.com/Sirupsen/logrus"
 	"os"
-
-	// Minimalist http framework
 	"github.com/gin-gonic/gin"
 )
 
 // Global read only variable to be used to access global configuration
 var (
-	Config         *Specification
 	UnleashVersion = "0.1.0"
+    Config *Specification
 )
 
+// Struct holding everything needed to serve Unleash application
+type Unleash struct {
+    Engine *gin.Engine
+    Config *Specification
+}
+
 // Initializers to be executed before the application runs
-func initialize(config *Specification) {
+func (unleash *Unleash) Initialize(config *Specification) error {
+
 	// Set the log level to debug
 	log.SetLevel(log.DebugLevel)
 
@@ -27,39 +32,41 @@ func initialize(config *Specification) {
 	// Print all configuration variables
 	config.Describe()
 
-	// Assign configuration globally
-	Config = config
+    // Assign the incoming configuration
+    unleash.Config = config
+
+    // FIXME: Attribute the configuration globally for ease of use
+    Config = config
+
+    return nil
 }
 
-// Launch the application based on the gin http framework
-func Run() {
-	// Parse the configuration
-	config, err := ParseConfiguration()
-	if err != nil {
-		panic("Not able to parse the configuration ! Cause: " + err.Error())
-	}
+// Initialize the Unleash application based on the gin http framework
+func New() *Unleash {
 
-	// Initialize the application
-	initialize(&config)
+    // Will be used to hold everything needed to serve Unleash
+    var unleash Unleash
 
 	// Create a default gin stack
-	router := gin.Default()
+	unleash.Engine = gin.New()
+
+    // Create an empty configuration to avoid panic
+    unleash.Config = &Specification{}
 
 	// Routes
 	// Github push event
-	githubEvents := router.Group("/events/github", GithubHmacAuthenticator())
+	githubEvents := unleash.Engine.Group("/events/github", GithubHmacAuthenticator())
 	githubEvents.POST("/push", GithubPushHandler)
 
 	// Bitbucket push event
-	bitbucketEvents := router.Group("/events/bitbucket", BitbucketHmacAuthenticator())
+	bitbucketEvents := unleash.Engine.Group("/events/bitbucket", BitbucketHmacAuthenticator())
 	bitbucketEvents.POST("/push", BitbucketPushHandler)
 
 	// Info routes
-	info := router.Group("/info")
+	info := unleash.Engine.Group("/info")
 	info.GET("/ping", PingHandler)
 	info.GET("/status", StatusHandler)
 	info.GET("/version", VersionHandler)
 
-	// Unleash!
-	router.Run(":" + config.Port) // listen and serve on port defined by environment variable UNLEASH_PORT
+	return &unleash
 }

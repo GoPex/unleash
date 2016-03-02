@@ -2,8 +2,6 @@ package unleash
 
 import (
 	log "github.com/Sirupsen/logrus"
-
-	// Automatic parse of the configuration
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -16,7 +14,7 @@ func (specification *Specification) Describe() {
 		"Port":                  specification.Port,
 		"GitUsername":           specification.GitUsername,
 		"BitbucketRepositories": specification.BitbucketRepositories,
-	}).Info("Starting unleash")
+	}).Info("Unleash initialized !")
 }
 
 // Struct to hold the configuration of the application

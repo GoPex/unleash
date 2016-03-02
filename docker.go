@@ -8,11 +8,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
-
-	// Tar utilities for go
 	"github.com/Rolinh/targo"
-
-	// go client for docker
 	"github.com/GoPex/dockerclient"
 )
 
@@ -112,10 +108,10 @@ func BuildFromTar(tarPath string, imageRepository string, contextLogger *log.Ent
 
 	// Send the build request to Docker
 	reader, err := docker.BuildImage(buildImageConfig)
-	defer reader.Close()
 	if err != nil {
 		return "", err
 	}
+	defer reader.Close()
 
 	// Hold the last stream message in a string in order to extract the id at the end of the build
 	var lastStreamMessage string

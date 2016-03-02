@@ -3,7 +3,6 @@ package unleash_test
 import (
 	"testing"
 
-	// Unleash package to test
 	"github.com/GoPex/unleash"
 )
 

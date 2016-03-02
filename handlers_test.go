@@ -6,12 +6,10 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"github.com/gin-gonic/gin"
 
-	// Unleash package to test
 	"github.com/GoPex/unleash"
 	"github.com/GoPex/unleash/bindings"
-	// Minimalist http framework
-	"github.com/gin-gonic/gin"
 )
 
 // Test the PingHandler

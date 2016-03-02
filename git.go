@@ -1,7 +1,6 @@
 package unleash
 
 import (
-	// go client for git
 	"github.com/libgit2/git2go"
 )
 
