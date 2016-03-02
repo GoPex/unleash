@@ -2,9 +2,9 @@ package unleash
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
-	"github.com/gin-gonic/gin"
 
 	// Internal bindings
 	"github.com/GoPex/unleash/bindings"
@@ -26,7 +26,7 @@ func GithubPushHandler(c *gin.Context) {
 		// Render status OK (200)
 		c.JSON(http.StatusOK,
 			bindings.PushEventResponse{Status: "Processing",
-				Message: "Triggered build for Github push event for commit " + pushEvent.HeadCommit.Id + " on branch " + branch +" of the repository " + pushEvent.Repository.FullName +"."},
+				Message: "Triggered build for Github push event for commit " + pushEvent.HeadCommit.Id + " on branch " + branch + " of the repository " + pushEvent.Repository.FullName + "."},
 		)
 	} else {
 		// Render status BadRequest (400)

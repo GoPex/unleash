@@ -2,11 +2,11 @@ package unleash_test
 
 import (
 	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
-	"github.com/gin-gonic/gin"
 
 	"github.com/GoPex/unleash"
 	"github.com/GoPex/unleash/bindings"

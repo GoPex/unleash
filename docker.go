@@ -3,13 +3,13 @@ package unleash
 import (
 	"encoding/json"
 	"errors"
+	"github.com/GoPex/dockerclient"
+	"github.com/Rolinh/targo"
 	log "github.com/Sirupsen/logrus"
 	"io"
 	"os"
 	"regexp"
 	"strings"
-	"github.com/Rolinh/targo"
-	"github.com/GoPex/dockerclient"
 )
 
 var (

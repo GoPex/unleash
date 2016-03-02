@@ -2,14 +2,14 @@ package unleash_test
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/gin"
 	"os"
 	"path/filepath"
-	"github.com/gin-gonic/gin"
-    "testing"
-    "reflect"
-    "runtime"
+	"reflect"
+	"runtime"
+	"testing"
 
-    "github.com/GoPex/unleash"
+	"github.com/GoPex/unleash"
 )
 
 var (
@@ -38,13 +38,13 @@ var (
 	testGithubPushEventJSON    = filepath.Join(dataDirectory, "github_push_event.json")
 	testBitbucketPushEventJSON = filepath.Join(dataDirectory, "bitbucket_push_event.json")
 
-    testDockerRegistryUrl = "localhost:5000"
+	testDockerRegistryUrl = "localhost:5000"
 
 	contextLogger = log.WithFields(log.Fields{
 		"environment": "test",
 	})
 
-    unleashConfigTest unleash.Specification
+	unleashConfigTest unleash.Specification
 )
 
 func init() {
@@ -63,62 +63,62 @@ func init() {
 		ApiKey:           "supersecret",
 		GitUsername:      "gopextest",
 		GitPassword:      os.Getenv("UNLEASH_GIT_PASSWORD"),
-        LogLevel: "warning"}
-    unleash.Config = &unleashConfigTest
+		LogLevel:         "warning"}
+	unleash.Config = &unleashConfigTest
 }
 
 type expectedRoute struct {
-    method string
-    path string
-    handler interface{}
+	method  string
+	path    string
+	handler interface{}
 }
 
 func nameOfFunction(f interface{}) string {
-    return runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
+	return runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
 }
 
 var (
-    expectedRoutes = []expectedRoute{
-        {"GET", "/info/ping", unleash.PingHandler},
-        {"GET", "/info/status", unleash.StatusHandler},
-        {"GET", "/info/version", unleash.VersionHandler},
-        {"POST", "/events/github/push", unleash.GithubPushHandler},
-        {"POST", "/events/bitbucket/push", unleash.BitbucketPushHandler},
-    }
+	expectedRoutes = []expectedRoute{
+		{"GET", "/info/ping", unleash.PingHandler},
+		{"GET", "/info/status", unleash.StatusHandler},
+		{"GET", "/info/version", unleash.VersionHandler},
+		{"POST", "/events/github/push", unleash.GithubPushHandler},
+		{"POST", "/events/bitbucket/push", unleash.BitbucketPushHandler},
+	}
 )
 
 func TestInitialize(t *testing.T) {
-    // Create an instance of the application
-    unleash := unleash.New()
+	// Create an instance of the application
+	unleash := unleash.New()
 
-    // Test the Initialize function
-    if err := unleash.Initialize(&unleashConfigTest); err != nil {
-        t.Errorf("Cannot initialize the application, cause: %s !", err.Error())
-    }
+	// Test the Initialize function
+	if err := unleash.Initialize(&unleashConfigTest); err != nil {
+		t.Errorf("Cannot initialize the application, cause: %s !", err.Error())
+	}
 }
 
 func TestRoutes(t *testing.T) {
-    // Create an instance of the application
-    unleash := unleash.New()
+	// Create an instance of the application
+	unleash := unleash.New()
 
-    // Get routes definine by the application
-    routesInfo := unleash.Engine.Routes()
+	// Get routes definine by the application
+	routesInfo := unleash.Engine.Routes()
 
-    // Test each routes values (method, path, handler)
-    found := false
-    for _, expected := range expectedRoutes {
-        found = false
-        for _, route := range routesInfo {
-            if expected.method == route.Method && expected.path == route.Path {
-                found = true
-                if nameOfFunction(expected.handler) != route.Handler {
-                     t.Errorf("Route handler doest not match for %s %s, expected %s, actual %s", expected.method, expected.path, expected.handler, route.Handler)
-                }
-            }
-        }
+	// Test each routes values (method, path, handler)
+	found := false
+	for _, expected := range expectedRoutes {
+		found = false
+		for _, route := range routesInfo {
+			if expected.method == route.Method && expected.path == route.Path {
+				found = true
+				if nameOfFunction(expected.handler) != route.Handler {
+					t.Errorf("Route handler doest not match for %s %s, expected %s, actual %s", expected.method, expected.path, expected.handler, route.Handler)
+				}
+			}
+		}
 
-        if !found {
-            t.Errorf("No route found for %s %s !", expected.method, expected.path)
-        }
-    }
+		if !found {
+			t.Errorf("No route found for %s %s !", expected.method, expected.path)
+		}
+	}
 }
