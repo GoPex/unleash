@@ -1,12 +1,9 @@
 package unleash
 
 import (
+    "os"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
-	"os"
-    "fmt"
-    "io"
-    "net/http"
 )
 
 // Global read only variable to be used to access global configuration
@@ -48,28 +45,6 @@ func (unleash *Unleash) Initialize(config *Specification) error {
 	return nil
 }
 
-func test(c *gin.Context) {
-    fileName := "/tmp/tamere"
-
-    url := "https://bitbucket.org/gopex/unleash_test_repository_private/get/testing_branch_push_event.zip"
-    res, err := http.Get(url)
-    if err != nil {
-        return nil, err
-    }
-    defer res.Body.Close()
-
-    buf := &bytes.Buffer{}
-
-    _, err = io.Copy(buf, res.Body)
-    if err != nil {
-        return nil, err
-    }
-
-    urlReader, err := bytes.NewReader(buf.Bytes())
-
-    zr, err := zip.NewReader(urlReader, int64(urlReader.Len()))
-}
-
 // Initialize the Unleash application based on the gin http framework
 func New() *Unleash {
 
@@ -96,8 +71,6 @@ func New() *Unleash {
 	info.GET("/ping", PingHandler)
 	info.GET("/status", StatusHandler)
 	info.GET("/version", VersionHandler)
-
-    unleash.Engine.GET("/download", test)
 
 	return &unleash
 }
