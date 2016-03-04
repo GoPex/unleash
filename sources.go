@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"io"
 	"net/http"
 	"os"
@@ -16,15 +15,13 @@ import (
 // ReadUrl create a *tar.Reader from an url
 func ExtractRepository(url string, destination string) error {
 	// Get the tar file from url
-	check := http.Client{
-		CheckRedirect: func(r *http.Request, via []*http.Request) error {
-			log.Error(url)
-			log.Error("REDIRECT")
-			r.URL.Opaque = r.URL.Path
-			return nil
-		},
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
 	}
-	res, err := check.Get(url)
+	request.SetBasicAuth(Config.GitUsername, Config.GitPassword)
+
+	res, err := (&http.Client{}).Do(request)
 	if err != nil {
 		return err
 	}
@@ -32,7 +29,7 @@ func ExtractRepository(url string, destination string) error {
 
 	// Check the return code of our http request
 	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("Not able to GET %s, status code is %s !", url, res.StatusCode)
+		return fmt.Errorf("Not able to GET %s, status code is %d !", url, res.StatusCode)
 	}
 
 	// Copy the body to a bytes buffer that we'll use to read our tar from
