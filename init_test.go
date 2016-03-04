@@ -60,7 +60,7 @@ func init() {
 		RegistryPassword: os.Getenv("UNLEASH_REGISTRY_PASSWORD"),
 		RegistryEmail:    "gilles.albin@gmail.com",
 		ApiKey:           "supersecret",
-		GitUsername:      "gopextest",
+		GitUsername:      "albinos",
 		GitPassword:      os.Getenv("UNLEASH_GIT_PASSWORD"),
 		LogLevel:         "warning"}
 	unleash.Config = &unleashConfigTest
