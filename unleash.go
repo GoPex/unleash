@@ -1,9 +1,9 @@
 package unleash
 
 import (
-    "os"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 // Global read only variable to be used to access global configuration

@@ -26,7 +26,7 @@ func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string,
 
 	// Generate the full working directory path for the sake of explicitness
 	fullWorkingDirectory := filepath.Join(uniqueWorkingDirectory, repositoryFullName, branch, commit)
-    os.MkdirAll(fullWorkingDirectory, 0600)
+	os.MkdirAll(fullWorkingDirectory, 0600)
 
 	// Clone the repository
 	contextLogger.Debug("Downloading sources")

@@ -68,10 +68,10 @@ func init() {
 
 // getGithubArchive construct a full url to a Github repository archive
 func githubArchiveUrl(repositoryName string, branch string) string {
-    return gopexGithubUrl + "/" + repositoryName + "/tarball/" + branch
+	return gopexGithubUrl + "/" + repositoryName + "/tarball/" + branch
 }
 
 // getBitbucketArchive construct a full url to a Bitbucket repository archive
 func bitbucketArchiveUrl(repositoryName string, branch string) string {
-    return gopexBitbucketUrl + "/" + repositoryName + "/get/" + branch + ".tar.gz"
+	return gopexBitbucketUrl + "/" + repositoryName + "/get/" + branch + ".tar.gz"
 }
