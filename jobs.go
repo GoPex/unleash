@@ -1,19 +1,20 @@
 package unleash
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-// Jobs to build a Docker image from a Dockerfile coming from a repository and push
-// it to the registry
-func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string, branch string, commit string) error {
+// BuildAndPushFromRepository builds a Docker image from a Dockerfile coming
+// from a git repository and push the builded Docker image to the registry
+func BuildAndPushFromRepository(repositoryURL string, repositoryFullName string, branch string, commit string) error {
 	contextLogger := log.WithFields(log.Fields{
-		"repository_url": repositoryUrl,
+		"repository_url": repositoryURL,
 		"repository":     repositoryFullName,
 		"branch":         branch,
 		"commit":         commit,
@@ -30,7 +31,7 @@ func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string,
 
 	// Clone the repository
 	contextLogger.Debug("Downloading sources")
-	if err := ExtractRepository(repositoryUrl, fullWorkingDirectory); err != nil {
+	if err := ExtractRepository(repositoryURL, fullWorkingDirectory); err != nil {
 		contextLogger.Error("Error cloning, cause: ", err)
 		return err
 	}

@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// ReadUrl create a *tar.Reader from an url
+// ExtractRepository url
 func ExtractRepository(url string, destination string) error {
 	// Get the tar file from url
 	request, err := http.NewRequest("GET", url, nil)
