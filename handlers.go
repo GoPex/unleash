@@ -18,11 +18,16 @@ func GithubPushHandler(c *gin.Context) {
 		// Get the branch name from the JSON "ref" attribute
 		tokens := strings.Split(pushEvent.Ref, "/")
 		branch := tokens[len(tokens)-1]
+
+		//Evaluate Github push event variables in the direct archive download url
+		repositoryArchiveUrl := EvaluateUrl(pushEvent.Repository.ArchiveURL, branch)
+
 		// Launch the build in background
-		go BuildAndPushFromRepository(pushEvent.Repository.CloneURL,
+		go BuildAndPushFromRepository(repositoryArchiveUrl,
 			pushEvent.Repository.FullName,
 			branch,
 			pushEvent.HeadCommit.Id)
+
 		// Render status OK (200)
 		c.JSON(http.StatusOK,
 			bindings.PushEventResponse{Status: "Processing",
@@ -43,12 +48,16 @@ func BitbucketPushHandler(c *gin.Context) {
 	var pushEvent bindings.BitbucketPushEvent
 	if c.BindJSON(&pushEvent) == nil {
 		for _, change := range pushEvent.Push.Changes {
+			// The bitbucket push event doesn't contain a direct archive download url, we need to build it ourself
+			repositoryArchiveUrl := pushEvent.Repository.Links.HTML.Href + "/get/" + change.New.Name + ".tar.gz"
+
 			// Launch the build in background
-			go BuildAndPushFromRepository(pushEvent.Repository.Links.HTML.Href,
+			go BuildAndPushFromRepository(repositoryArchiveUrl,
 				pushEvent.Repository.FullName,
 				change.New.Name,
 				change.New.Target.Hash)
 		}
+
 		// Render status OK (200)
 		c.JSON(http.StatusOK,
 			bindings.PushEventResponse{Status: "Processing",

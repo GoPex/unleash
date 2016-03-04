@@ -26,7 +26,7 @@ var (
 		{"UNLEASH_API_KEY", "ApiKey", "supersecret"},
 		{"UNLEASH_GIT_USERNAME", "GitUsername", "superuser"},
 		{"UNLEASH_GIT_PASSWORD", "GitPassword", "superpassword"},
-		{"UNLEASH_BITBUCKET_REPOSITORIES", "BitbucketRepositories", testRepositoryUrlBitbucket + ", " + testPrivateRepositoryUrl},
+		{"UNLEASH_BITBUCKET_REPOSITORIES", "BitbucketRepositories", gopexBitbucketUrl + "," + gopexGithubUrl},
 	}
 )
 

@@ -15,12 +15,12 @@ var (
 	workingDirectory = filepath.Join(testsDirectory, "tmp")
 	dataDirectory    = filepath.Join(testsDirectory, "data")
 
-	gopexGithubUrl    = "https://github.com/GoPex"
+	gopexGithubUrl    = "https://api.github.com/repos/GoPex"
 	gopexBitbucketUrl = "https://bitbucket.org/gopex"
 
-	testRepositoryUrl                      = gopexGithubUrl + "/unleash_test_repository.git"
-	testRepositoryUrlBitbucket             = gopexBitbucketUrl + "/unleash_test_repository.git"
-	testPrivateRepositoryUrl               = gopexBitbucketUrl + "/unleash_test_repository_private.git"
+	testRepositoryName        = "unleash_test_repository"
+	testPrivateRepositoryName = "unleash_test_repository_private"
+
 	testDestinationPath                    = filepath.Join(workingDirectory, "unleash_test_repository")
 	testRepositoryTarPath                  = filepath.Join(dataDirectory, "unleash_test_repository.tar")
 	testUnknowInstructionRepositoryTarPath = filepath.Join(dataDirectory, "unleash_test_repository_unknown_instruction.tar")
@@ -60,8 +60,18 @@ func init() {
 		RegistryPassword: os.Getenv("UNLEASH_REGISTRY_PASSWORD"),
 		RegistryEmail:    "gilles.albin@gmail.com",
 		ApiKey:           "supersecret",
-		GitUsername:      "gopextest",
+		GitUsername:      "albinos",
 		GitPassword:      os.Getenv("UNLEASH_GIT_PASSWORD"),
 		LogLevel:         "warning"}
 	unleash.Config = &unleashConfigTest
+}
+
+// getGithubArchive construct a full url to a Github repository archive
+func githubArchiveUrl(repositoryName string, branch string) string {
+	return gopexGithubUrl + "/" + repositoryName + "/tarball/" + branch
+}
+
+// getBitbucketArchive construct a full url to a Bitbucket repository archive
+func bitbucketArchiveUrl(repositoryName string, branch string) string {
+	return gopexBitbucketUrl + "/" + repositoryName + "/get/" + branch + ".tar.gz"
 }

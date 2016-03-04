@@ -26,10 +26,11 @@ func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string,
 
 	// Generate the full working directory path for the sake of explicitness
 	fullWorkingDirectory := filepath.Join(uniqueWorkingDirectory, repositoryFullName, branch, commit)
+	os.MkdirAll(fullWorkingDirectory, 0600)
 
 	// Clone the repository
-	contextLogger.Debug("Cloning")
-	if _, err := Clone(repositoryUrl, fullWorkingDirectory, branch); err != nil {
+	contextLogger.Debug("Downloading sources")
+	if err := ExtractRepository(repositoryUrl, fullWorkingDirectory); err != nil {
 		contextLogger.Error("Error cloning, cause: ", err)
 		return err
 	}
@@ -48,14 +49,14 @@ func BuildAndPushFromRepository(repositoryUrl string, repositoryFullName string,
 	}
 
 	// The repository used to tag the image must be in lower case
-	contextLogger.Debug("Building ", imageRepository)
+	contextLogger.Debug("Building Dockerfile", imageRepository)
 	if _, err := BuildFromDirectory(fullWorkingDirectory, imageRepository, contextLogger); err != nil {
 		contextLogger.Error("Error building Dockerfile, cause: ", err)
 		return err
 	}
 
 	// Push the Docker image to the registry
-	contextLogger.Debug("Pushing ", imageRepository)
+	contextLogger.Debug("Pushing Docker image ", imageRepository)
 	if err := PushImage(imageRepository); err != nil {
 		contextLogger.Error("Error pushing Docker image, cause: ", err)
 		return err

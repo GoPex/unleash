@@ -10,7 +10,7 @@ import (
 func TestBuildAndPushFromRepository(t *testing.T) {
 	defer dockerClient.RemoveImage(testImageRepository+":latest", true)
 
-	if err := unleash.BuildAndPushFromRepository(testRepositoryUrl, testRepositoryFullName, testRepositoryDefaultBranch, testRepositoryCommitId); err != nil {
+	if err := unleash.BuildAndPushFromRepository(githubArchiveUrl(testRepositoryName, testRepositoryDefaultBranch), testRepositoryFullName, testRepositoryDefaultBranch, testRepositoryCommitId); err != nil {
 		t.Error(err)
 	}
 }
