@@ -19,8 +19,8 @@ func GithubPushHandler(c *gin.Context) {
 		tokens := strings.Split(pushEvent.Ref, "/")
 		branch := tokens[len(tokens)-1]
 
-        //TODO: Evaluate Github push event variables in the direct archive download url
-        repositoryArchiveUrl := pushEvent.Repository.ArchiveURL
+        //Evaluate Github push event variables in the direct archive download url
+        repositoryArchiveUrl := EvaluateUrl(pushEvent.Repository.ArchiveURL, branch)
 
 		// Launch the build in background
 		go BuildAndPushFromRepository(repositoryArchiveUrl,

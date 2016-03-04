@@ -18,6 +18,7 @@ func ExtractRepository(url string, destination string) (error) {
     // Get the tar file from url
      check := http.Client{
              CheckRedirect: func(r *http.Request, via []*http.Request) error {
+                    log.Error(url)
                     log.Error("REDIRECT")
                      r.URL.Opaque = r.URL.Path
                      return nil
@@ -30,7 +31,6 @@ func ExtractRepository(url string, destination string) (error) {
     defer res.Body.Close()
 
     // Check the return code of our http request
-    log.Error(url)
     if res.StatusCode != http.StatusOK {
         return fmt.Errorf("Not able to GET %s, status code is %s !", url, res.StatusCode)
     }
