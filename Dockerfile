@@ -7,10 +7,10 @@ ENV REFRESHED_AT 2016-02-16
 EXPOSE 3000
 
 # Prepare directory holding our application
-RUN mkdir -p $GOPATH/src/bitbucket.org/gopex/unleash
+RUN mkdir -p /go/src/bitbucket.org/gopex/unleash
 
 # Set the working directory
-WORKDIR $GOPATH/src/bitbucket.org/gopex/unleash
+WORKDIR /go/src/bitbucket.org/gopex/unleash
 
 # Copy our application into the container
 COPY . .
