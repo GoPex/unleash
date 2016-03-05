@@ -5,7 +5,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-// Log all variables parsed with envconfig
+// Describe will log all variables parsed with envconfig
 func (specification *Specification) Describe() {
 	log.WithFields(log.Fields{
 		"Port":                  specification.Port,
@@ -18,22 +18,22 @@ func (specification *Specification) Describe() {
 	}).Info("Unleash initialized !")
 }
 
-// Struct to hold the configuration of the application
+// Specification to hold the configuration of the application
 type Specification struct {
-	Port                  string
+	Port                  string `default:"3000"`
 	LogLevel              string `envconfig:"log_level" default:"debug"`
 	WorkingDirectory      string `envconfig:"working_directory"`
 	RegistryURL           string `envconfig:"registry_url"`
 	RegistryUsername      string `envconfig:"registry_username"`
 	RegistryPassword      string `envconfig:"registry_password"`
 	RegistryEmail         string `envconfig:"registry_email"`
-	ApiKey                string `envconfig:"api_key"`
+	APIKey                string `envconfig:"api_key"`
 	GitUsername           string `envconfig:"git_username"`
 	GitPassword           string `envconfig:"git_password"`
 	BitbucketRepositories string `envconfig:"bitbucket_repositories"`
 }
 
-// Parse the configuration of Unleash based on environment variables
+// ParseConfiguration will parse the configuration of Unleash based on environment variables
 func ParseConfiguration() (Specification, error) {
 	// Gather the configuration
 	var config Specification

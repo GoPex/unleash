@@ -23,7 +23,7 @@ var (
 		{"UNLEASH_REGISTRY_USERNAME", "RegistryUsername", "username"},
 		{"UNLEASH_REGISTRY_PASSWORD", "RegistryPassword", "password"},
 		{"UNLEASH_REGISTRY_EMAIL", "RegistryEmail", "username@example.org"},
-		{"UNLEASH_API_KEY", "ApiKey", "supersecret"},
+		{"UNLEASH_API_KEY", "APIKey", "supersecret"},
 		{"UNLEASH_GIT_USERNAME", "GitUsername", "superuser"},
 		{"UNLEASH_GIT_PASSWORD", "GitPassword", "superpassword"},
 		{"UNLEASH_BITBUCKET_REPOSITORIES", "BitbucketRepositories", gopexBitbucketUrl + "," + gopexGithubUrl},

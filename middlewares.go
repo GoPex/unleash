@@ -7,14 +7,36 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	log "github.com/Sirupsen/logrus"
-	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
+	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/gin"
+
 	"github.com/GoPex/unleash/bindings"
 )
+
+// verifySignature is a function to check the incoming's request signature
+type verifySignature func(c *gin.Context) error
+
+// HmacAuthenticator is a gin compatible middleware to check incoming request's signature
+// for Github
+func HmacAuthenticator(verify verifySignature) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Authenticate the request
+		if err := verify(c); err != nil {
+			log.WithFields(log.Fields{
+				"method":     c.Request.Method,
+				"path":       c.Request.URL.Path,
+				"ip":         c.ClientIP(),
+				"user-agent": c.Request.UserAgent(),
+				"status":     http.StatusUnauthorized,
+			}).Warn(err)
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+	}
+}
 
 // Test the sha1 signature headers of the incoming request using
 // User-Agent to get the api key to use. This is based on the Github
@@ -43,7 +65,7 @@ func verifyGithubSignature(c *gin.Context) error {
 	}
 
 	// Construct the expected mac with the api key
-	mac := hmac.New(sha1.New, []byte(Config.ApiKey))
+	mac := hmac.New(sha1.New, []byte(Config.APIKey))
 	mac.Write(body)
 	expectedMAC := mac.Sum(nil)
 	expectedSig := "sha1=" + hex.EncodeToString(expectedMAC)
@@ -55,24 +77,6 @@ func verifyGithubSignature(c *gin.Context) error {
 
 	// Signatures matches !
 	return nil
-}
-
-// Gin compatible middleware to check incoming request's signature
-// for Github
-func GithubHmacAuthenticator() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Authenticate the request
-		if err := verifyGithubSignature(c); err != nil {
-			log.WithFields(log.Fields{
-				"method":     c.Request.Method,
-				"path":       c.Request.URL.Path,
-				"ip":         c.ClientIP(),
-				"user-agent": c.Request.UserAgent(),
-				"status":     http.StatusUnauthorized,
-			}).Warn(err)
-			c.AbortWithStatus(http.StatusUnauthorized)
-		}
-	}
 }
 
 // Test the sha1 signature headers of the incoming request using
@@ -119,22 +123,4 @@ func verifyBitbucketSignature(c *gin.Context) error {
 
 	// Signatures matches !
 	return nil
-}
-
-// Gin compatible middleware to check incoming request's signature
-// for Bitbucket
-func BitbucketHmacAuthenticator() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Authenticate the request
-		if err := verifyBitbucketSignature(c); err != nil {
-			log.WithFields(log.Fields{
-				"method":     c.Request.Method,
-				"path":       c.Request.URL.Path,
-				"ip":         c.ClientIP(),
-				"user-agent": c.Request.UserAgent(),
-				"status":     http.StatusUnauthorized,
-			}).Warn(err)
-			c.AbortWithStatus(http.StatusUnauthorized)
-		}
-	}
 }

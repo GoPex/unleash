@@ -19,6 +19,13 @@ func main() {
 		panic("Not able to initialize the application ! Cause: " + err.Error())
 	}
 
+	// Check the configuration
+	if application.Config.Port == "" {
+		panic("No port was given !")
+	}
+
 	// Listen and serve on port defined by environment variable UNLEASH_PORT
-	application.Engine.Run(":" + unleash.Config.Port)
+	if err := application.Engine.Run(":" + application.Config.Port); err != nil {
+		panic("Error while starting unleash ! Cause: " + err.Error())
+	}
 }

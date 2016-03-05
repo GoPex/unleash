@@ -60,11 +60,11 @@ func New() *Unleash {
 
 	// Routes
 	// Github push event
-	githubEvents := unleash.Engine.Group("/events/github", GithubHmacAuthenticator())
+	githubEvents := unleash.Engine.Group("/events/github", HmacAuthenticator(verifyGithubSignature))
 	githubEvents.POST("/push", GithubPushHandler)
 
 	// Bitbucket push event
-	bitbucketEvents := unleash.Engine.Group("/events/bitbucket", BitbucketHmacAuthenticator())
+	bitbucketEvents := unleash.Engine.Group("/events/bitbucket", HmacAuthenticator(verifyBitbucketSignature))
 	bitbucketEvents.POST("/push", BitbucketPushHandler)
 
 	// Info routes
