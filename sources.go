@@ -12,42 +12,14 @@ import (
 	"strings"
 )
 
-// ExtractRepository url
+// ExtractRepository from an url hosting a tar.gz of this repository with an
+// added root directory that will be flatten
 func ExtractRepository(url string, destination string) error {
-	// Get the tar file from url
-	request, err := http.NewRequest("GET", url, nil)
+	// Get the tar reader from the URL
+	tr, err := ReadURL(url)
 	if err != nil {
 		return err
 	}
-	request.SetBasicAuth(Config.GitUsername, Config.GitPassword)
-
-	res, err := (&http.Client{}).Do(request)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
-
-	// Check the return code of our http request
-	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("Not able to GET %s, status code is %d !", url, res.StatusCode)
-	}
-
-	// Copy the body to a bytes buffer that we'll use to read our tar from
-	buf := &bytes.Buffer{}
-	_, err = io.Copy(buf, res.Body)
-	if err != nil {
-		return err
-	}
-
-	// Create a gzip..Reader from our bytes.Buffer
-	gr, err := gzip.NewReader(buf)
-	if err != nil {
-		return err
-	}
-	defer gr.Close()
-
-	// Create a tar.Reader from our gzip.Reader
-	tr := tar.NewReader(gr)
 
 	// Extract files from the tar
 	for {
@@ -81,4 +53,42 @@ func ExtractRepository(url string, destination string) error {
 	}
 
 	return nil
+}
+
+// ReadURL reads a tar.gz archive from an URL and return the associated reader
+func ReadURL(url string) (*tar.Reader, error) {
+	// Get the tar file from url
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	request.SetBasicAuth(Config.GitUsername, Config.GitPassword)
+
+	res, err := (&http.Client{}).Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	// Check the return code of our http request
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Not able to GET %s, status code is %d !", url, res.StatusCode)
+	}
+
+	// Copy the body to a bytes buffer that we'll use to read our tar from
+	buf := &bytes.Buffer{}
+	_, err = io.Copy(buf, res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a gzip..Reader from our bytes.Buffer
+	gr, err := gzip.NewReader(buf)
+	if err != nil {
+		return nil, err
+	}
+	defer gr.Close()
+
+	// Return a tar.Reader from our gzip.Reader
+	return tar.NewReader(gr), nil
 }
