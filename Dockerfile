@@ -1,19 +1,11 @@
-# From official golang alpine image
-FROM gopex/ubuntu_golang:1.6rc1
-MAINTAINER Albin Gilles "gilles.albin@gmail.com"
-ENV REFRESHED_AT 2016-02-16
+# Use golang alpine as base image
+FROM golang:1.6.0-alpine
+MAINTAINER Albin Gilles <gilles.albin@gmail.com>
 
-# Port exposed by this application
+# Add certificates
+RUN apk add --update wget ca-certificates && \
+  apk del wget ca-certificates && \
+  rm /var/cache/apk/*
+
+# Expose port to be used by unleash
 EXPOSE 3000
-
-# Prepare directory holding our application
-RUN mkdir -p /go/src/bitbucket.org/gopex/unleash
-
-# Set the working directory
-WORKDIR /go/src/bitbucket.org/gopex/unleash
-
-# Copy our application into the container
-COPY . .
-
-# Get dependencies
-RUN go get
