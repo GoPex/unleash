@@ -2,11 +2,12 @@ package unleash_test
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/GoPex/unleash"
 	"github.com/GoPex/unleash/bindings"
@@ -92,72 +93,52 @@ func TestVersionHandler(t *testing.T) {
 	}
 }
 
-// Test the GithubPushHandler
-func TestGithubPushHandler(t *testing.T) {
-	testGithubPushEventJSON := "./tests/data/github_push_event.json"
-	body, err := os.Open(testGithubPushEventJSON)
-	if err != nil {
-		t.Fatalf("Unable to open %s to be send as the body of the POST request !", testGithubPushEventJSON)
-	}
+type pushHandler func(c *gin.Context)
 
-	req, _ := http.NewRequest("POST", "/events/github/push", body)
-	req.Header.Set("Content-Type", "application/json")
-	w := httptest.NewRecorder()
-
-	router := gin.New()
-	router.POST("/events/github/push", unleash.GithubPushHandler)
-
-	router.ServeHTTP(w, req)
-
-	if w.Code != http.StatusOK {
-		t.Errorf("Response code should be %s, was: %s", http.StatusOK, w.Code)
-	}
-
-	var eventResponse bindings.PushEventResponse
-	if err := json.NewDecoder(w.Body).Decode(&eventResponse); err != nil {
-		t.Error("Response body could not be parsed !")
-	}
-
-	if eventResponse.Status == "" || eventResponse.Status == "Aborted" {
-		t.Errorf("Response Status should be Processing and was %s !", eventResponse.Status)
-	}
-
-	if eventResponse.Message == "" {
-		t.Error("Reponse Message should not be empty !")
-	}
+type handlerTest struct {
+	jsonInputPath string
+	handler       gin.HandlerFunc
 }
 
-// Test the BitbucketPushHandler
-func TestBitbucketPushHandler(t *testing.T) {
-	testBitbucketPushEventJSON := "./tests/data/bitbucket_push_event.json"
-	body, err := os.Open(testBitbucketPushEventJSON)
-	if err != nil {
-		t.Fatalf("Unable to open %s to be send as the body of the POST request !", testBitbucketPushEventJSON)
+var (
+	handlerTests = []handlerTest{
+		{"./tests/data/github_push_event.json", unleash.GithubPushHandler},
+		{"./tests/data/bitbucket_push_event.json", unleash.BitbucketPushHandler},
 	}
+)
 
-	req, _ := http.NewRequest("POST", "/events/bitbucket/push", body)
-	req.Header.Set("Content-Type", "application/json")
-	w := httptest.NewRecorder()
+// TestPushHandlers
+func TestPushHandlers(t *testing.T) {
+	for _, handlerTest := range handlerTests {
+		body, err := os.Open(handlerTest.jsonInputPath)
+		if err != nil {
+			t.Fatalf("Unable to open %s to be send as the body of the POST request !", testGithubPushEventJSON)
+		}
 
-	router := gin.New()
-	router.POST("/events/bitbucket/push", unleash.BitbucketPushHandler)
+		req, _ := http.NewRequest("POST", "/push", body)
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
 
-	router.ServeHTTP(w, req)
+		router := gin.New()
+		router.POST("/push", handlerTest.handler)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("Response code should be %s, was: %s", http.StatusOK, w.Code)
-	}
+		router.ServeHTTP(w, req)
 
-	var eventResponse bindings.PushEventResponse
-	if err := json.NewDecoder(w.Body).Decode(&eventResponse); err != nil {
-		t.Error("Response body could not be parsed !")
-	}
+		if w.Code != http.StatusOK {
+			t.Errorf("Response code should be %s, was: %s", http.StatusOK, w.Code)
+		}
 
-	if eventResponse.Status == "" || eventResponse.Status == "Aborted" {
-		t.Errorf("Response Status should be Processing and was %s !", eventResponse.Status)
-	}
+		var eventResponse bindings.PushEventResponse
+		if err := json.NewDecoder(w.Body).Decode(&eventResponse); err != nil {
+			t.Error("Response body could not be parsed !")
+		}
 
-	if eventResponse.Message == "" {
-		t.Error("Reponse Message should not be empty !")
+		if eventResponse.Status == "" || eventResponse.Status == "Aborted" {
+			t.Errorf("Response Status should be Processing and was %s !", eventResponse.Status)
+		}
+
+		if eventResponse.Message == "" {
+			t.Error("Reponse Message should not be empty !")
+		}
 	}
 }

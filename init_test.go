@@ -1,10 +1,11 @@
 package unleash_test
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/gin-gonic/gin"
 	"os"
 	"path/filepath"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/gin"
 
 	"github.com/GoPex/unleash"
 )
@@ -59,7 +60,7 @@ func init() {
 		RegistryUsername: "gopextest",
 		RegistryPassword: os.Getenv("UNLEASH_REGISTRY_PASSWORD"),
 		RegistryEmail:    "gilles.albin@gmail.com",
-		ApiKey:           "supersecret",
+		APIKey:           "supersecret",
 		GitUsername:      "albinos",
 		GitPassword:      os.Getenv("UNLEASH_GIT_PASSWORD"),
 		LogLevel:         "warning"}

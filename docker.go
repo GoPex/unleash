@@ -3,20 +3,22 @@ package unleash
 import (
 	"encoding/json"
 	"errors"
-	"github.com/GoPex/dockerclient"
-	"github.com/Rolinh/targo"
-	log "github.com/Sirupsen/logrus"
 	"io"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/GoPex/dockerclient"
+	"github.com/Rolinh/targo"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (
-	bashColorRegex, _       = regexp.Compile("\x1b\\[[0-9;]*m")
 	buildSuccessfulRegex, _ = regexp.Compile("(Successfully built )[a-z0-9]*")
 )
 
+// MessageStream is a JSON struct to be used to parse incomming message from
+// the Doceker daemon
 type MessageStream struct {
 	Error       string `json:"error"`
 	ErrorDetail struct {
@@ -32,7 +34,7 @@ type MessageStream struct {
 	Stream string `json:"stream"`
 }
 
-// Send a Get _ping request to the docker daemon
+// Ping send a Get _ping request to the docker daemon
 func Ping() (string, error) {
 	docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
 	pong, err := docker.Ping()
@@ -44,7 +46,7 @@ func Ping() (string, error) {
 	return pong, nil
 }
 
-// Send a Get version request to the docker daemon
+// Version send a Get version request to the docker daemon
 func Version() (string, error) {
 	docker, err := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
 	version, err := docker.Version()
@@ -55,7 +57,7 @@ func Version() (string, error) {
 	return version.Version, nil
 }
 
-// Send a PushImage request to the docker daemon
+// PushImage send a push image request to the docker daemon
 func PushImage(imageRepository string) error {
 	// Initialize a Docker client
 	docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
@@ -71,7 +73,7 @@ func PushImage(imageRepository string) error {
 	return nil
 }
 
-// Send a BuildImage request to the docker daemon by sending a tar
+// BuildFromDirectory send a build request to the docker daemon by sending a tar
 // built with the given directory.
 func BuildFromDirectory(directoryPath string, imageRepository string, contextLogger *log.Entry) (string, error) {
 	// Path to the tar of the repository
@@ -90,7 +92,7 @@ func BuildFromDirectory(directoryPath string, imageRepository string, contextLog
 	return id, nil
 }
 
-// Send a BuildImage request to the docker daemon by sending the given tar.
+// BuildFromTar send a build request to the docker daemon by sending the given tar.
 func BuildFromTar(tarPath string, imageRepository string, contextLogger *log.Entry) (string, error) {
 	// Initialize a Docker client
 	docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
@@ -154,7 +156,7 @@ func BuildFromTar(tarPath string, imageRepository string, contextLogger *log.Ent
 	// Extract the ID of the image built from the last stream message of the Docker daemon
 	var id string
 	if lastStreamMessage != "" && buildSuccessfulRegex.MatchString(lastStreamMessage) {
-		id = extractId(lastStreamMessage)
+		id = extractID(lastStreamMessage)
 	} else {
 		return "", errors.New("No id found at the end of the build")
 	}
@@ -162,14 +164,14 @@ func BuildFromTar(tarPath string, imageRepository string, contextLogger *log.Ent
 	return id, nil
 }
 
-// Extract the id of a response message coming from the Docker daemon
-func extractId(message string) string {
+// extractID extract the id of a response message coming from the Docker daemon
+func extractID(message string) string {
 	tokens := strings.Split(message, " ")
 	return tokens[len(tokens)-1]
 }
 
-// Clean unwanted \n in incoming messages, needed for stream feed becasue
-// sometime the \n is not the last character, the color code is
+// cleanMessage cleans unwanted \n in incoming messages, needed for stream feed
+// becasue sometime the \n is not the last character, the color code is
 func cleanMessage(s string) string {
 	return strings.Replace(s, "\n", "", -1)
 }

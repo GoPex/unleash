@@ -16,15 +16,9 @@ func TestExtractRepository(t *testing.T) {
 	if err := unleash.ExtractRepository(githubArchiveUrl(testRepositoryName, testRepositoryDefaultBranch), workingDirectory); err != nil {
 		t.Error(err)
 	}
-}
 
-// TestExtractRepository_bitbucket tests the ExtractRepository function
-func TestExtractRepository_bitbucket(t *testing.T) {
-	workingDirectory := testDestinationPath + "_" + testRepositoryDefaultBranch
-	defer os.RemoveAll(workingDirectory)
-	os.MkdirAll(workingDirectory, 0600)
-
-	if err := unleash.ExtractRepository(bitbucketArchiveUrl(testRepositoryName, testRepositoryDefaultBranch), workingDirectory); err != nil {
+	defer os.RemoveAll(workingDirectory + "_bitbucket")
+	if err := unleash.ExtractRepository(bitbucketArchiveUrl(testRepositoryName, testRepositoryDefaultBranch), workingDirectory+"_bitbucket"); err != nil {
 		t.Error(err)
 	}
 }

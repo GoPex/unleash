@@ -29,12 +29,12 @@ func GithubPushHandler(c *gin.Context) {
 		go BuildAndPushFromRepository(repositoryArchiveURL,
 			pushEvent.Repository.FullName,
 			branch,
-			pushEvent.HeadCommit.Id)
+			pushEvent.HeadCommit.ID)
 
 		// Render status OK (200)
 		c.JSON(http.StatusOK,
 			bindings.PushEventResponse{Status: "Processing",
-				Message: "Triggered build for Github push event for commit " + pushEvent.HeadCommit.Id + " on branch " + branch + " of the repository " + pushEvent.Repository.FullName + "."},
+				Message: "Triggered build for Github push event for commit " + pushEvent.HeadCommit.ID + " on branch " + branch + " of the repository " + pushEvent.Repository.FullName + "."},
 		)
 	} else {
 		// Render status BadRequest (400)

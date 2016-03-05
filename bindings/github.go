@@ -1,5 +1,7 @@
 package bindings
 
+// GithubPushEvent is a JSON struct used to parsed the JSON payload send
+// by Github on push events
 type GithubPushEvent struct {
 	After      string        `json:"after"`
 	BaseRef    string        `json:"base_ref"`
@@ -22,7 +24,7 @@ type GithubPushEvent struct {
 			Username string `json:"username"`
 		} `json:"committer"`
 		Distinct  bool          `json:"distinct"`
-		Id        string        `json:"id"`
+		ID        string        `json:"id"`
 		Message   string        `json:"message"`
 		Modified  []string      `json:"modified"`
 		Removed   []interface{} `json:"removed"`
@@ -34,7 +36,7 @@ type GithubPushEvent struct {
 		Description      string `json:"description"`
 		EventsURL        string `json:"events_url"`
 		HooksURL         string `json:"hooks_url"`
-		Id               int    `json:"id"`
+		ID               int    `json:"id"`
 		IssuesURL        string `json:"issues_url"`
 		Login            string `json:"login"`
 		MembersURL       string `json:"members_url"`
@@ -80,8 +82,8 @@ type GithubPushEvent struct {
 		HasWiki          bool        `json:"has_wiki"`
 		Homepage         string      `json:"homepage"`
 		HooksURL         string      `json:"hooks_url"`
-		HtmlURL          string      `json:"html_url"`
-		Id               int         `json:"id"`
+		HTMLURL          string      `json:"html_url"`
+		ID               int         `json:"id"`
 		IssueCommentURL  string      `json:"issue_comment_url"`
 		IssueEventsURL   string      `json:"issue_events_url"`
 		IssuesURL        string      `json:"issues_url"`
@@ -129,9 +131,9 @@ type GithubPushEvent struct {
 		FollowersURL      string `json:"followers_url"`
 		FollowingURL      string `json:"following_url"`
 		GistsURL          string `json:"gists_url"`
-		GravatarId        string `json:"gravatar_id"`
-		HtmlURL           string `json:"html_url"`
-		Id                int    `json:"id"`
+		GravatarID        string `json:"gravatar_id"`
+		HTMLURL           string `json:"html_url"`
+		ID                int    `json:"id"`
 		Login             string `json:"login"`
 		OrganizationsURL  string `json:"organizations_url"`
 		ReceivedEventsURL string `json:"received_events_url"`
