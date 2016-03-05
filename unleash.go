@@ -1,9 +1,10 @@
 package unleash
 
 import (
+	"os"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
-	"os"
 )
 
 // Global read only variable to be used to access global configuration
@@ -12,13 +13,13 @@ var (
 	Config         *Specification
 )
 
-// Struct holding everything needed to serve Unleash application
+// Unleash struct holding everything needed to serve Unleash application
 type Unleash struct {
 	Engine *gin.Engine
 	Config *Specification
 }
 
-// Initializers to be executed before the application runs
+// Initialize to be executed before the application runs
 func (unleash *Unleash) Initialize(config *Specification) error {
 
 	// Set the log level to debug
@@ -45,7 +46,7 @@ func (unleash *Unleash) Initialize(config *Specification) error {
 	return nil
 }
 
-// Initialize the Unleash application based on the gin http framework
+// New initialize the Unleash application based on the gin http framework
 func New() *Unleash {
 
 	// Will be used to hold everything needed to serve Unleash
