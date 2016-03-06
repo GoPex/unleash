@@ -1,4 +1,4 @@
-FROM scratch
+FROM centurylink/ca-certs
 MAINTAINER Albin Gilles <gilles.albin@gmail.com>
 ENV REFRESHED_AT 2016-03-04
 
