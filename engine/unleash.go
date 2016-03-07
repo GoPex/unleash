@@ -1,26 +1,22 @@
-package unleash
+package engine
 
 import (
 	"os"
 
+	"github.com/GoPex/unleash/handlers"
+	"github.com/GoPex/unleash/helpers"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
-)
-
-// Global read only variable to be used to access global configuration
-var (
-	UnleashVersion = "0.1.0"
-	Config         *Specification
 )
 
 // Unleash struct holding everything needed to serve Unleash application
 type Unleash struct {
 	Engine *gin.Engine
-	Config *Specification
+	Config *helpers.Specification
 }
 
 // Initialize to be executed before the application runs
-func (unleash *Unleash) Initialize(config *Specification) error {
+func (unleash *Unleash) Initialize(config *helpers.Specification) error {
 
 	// Set the log level to debug
 	logLevel, err := log.ParseLevel(config.LogLevel)
@@ -41,7 +37,7 @@ func (unleash *Unleash) Initialize(config *Specification) error {
 	unleash.Config = config
 
 	// FIXME: Attribute the configuration globally for ease of use
-	Config = config
+	helpers.Config = config
 
 	return nil
 }
@@ -52,26 +48,26 @@ func New() *Unleash {
 	// Will be used to hold everything needed to serve Unleash
 	var unleash Unleash
 
-	// Create a default gin stack
-	unleash.Engine = gin.New()
-
 	// Create an empty configuration to avoid panic
-	unleash.Config = &Specification{}
+	unleash.Config = &helpers.Specification{}
+
+	// Create a default gin stack
+	unleash.Engine = gin.Default()
 
 	// Routes
 	// Github push event
 	githubEvents := unleash.Engine.Group("/events/github", HmacAuthenticator(verifyGithubSignature))
-	githubEvents.POST("/push", GithubPushHandler)
+	githubEvents.POST("/push", handlers.GithubPushHandler)
 
 	// Bitbucket push event
 	bitbucketEvents := unleash.Engine.Group("/events/bitbucket", HmacAuthenticator(verifyBitbucketSignature))
-	bitbucketEvents.POST("/push", BitbucketPushHandler)
+	bitbucketEvents.POST("/push", handlers.BitbucketPushHandler)
 
 	// Info routes
 	info := unleash.Engine.Group("/info")
-	info.GET("/ping", PingHandler)
-	info.GET("/status", StatusHandler)
-	info.GET("/version", VersionHandler)
+	info.GET("/ping", handlers.PingHandler)
+	info.GET("/status", handlers.StatusHandler)
+	info.GET("/version", handlers.VersionHandler)
 
 	return &unleash
 }

@@ -1,11 +1,13 @@
-package unleash_test
+package engine_test
 
 import (
 	"reflect"
 	"runtime"
 	"testing"
 
-	"github.com/GoPex/unleash"
+	"github.com/GoPex/unleash/engine"
+	"github.com/GoPex/unleash/handlers"
+	"github.com/GoPex/unleash/tests"
 )
 
 // Struct to do a table driven test for routes
@@ -18,11 +20,11 @@ type expectedRoute struct {
 // Var used by table driven test for routes
 var (
 	expectedRoutes = []expectedRoute{
-		{"GET", "/info/ping", unleash.PingHandler},
-		{"GET", "/info/status", unleash.StatusHandler},
-		{"GET", "/info/version", unleash.VersionHandler},
-		{"POST", "/events/github/push", unleash.GithubPushHandler},
-		{"POST", "/events/bitbucket/push", unleash.BitbucketPushHandler},
+		{"GET", "/info/ping", handlers.PingHandler},
+		{"GET", "/info/status", handlers.StatusHandler},
+		{"GET", "/info/version", handlers.VersionHandler},
+		{"POST", "/events/github/push", handlers.GithubPushHandler},
+		{"POST", "/events/bitbucket/push", handlers.BitbucketPushHandler},
 	}
 )
 
@@ -34,10 +36,10 @@ func nameOfFunction(f interface{}) string {
 // Test the initialize function of the application
 func TestInitialize(t *testing.T) {
 	// Create an instance of the application
-	unleash := unleash.New()
+	unleash := engine.New()
 
 	// Test the Initialize function
-	if err := unleash.Initialize(&unleashConfigTest); err != nil {
+	if err := unleash.Initialize(&tests.UnleashConfigTest); err != nil {
 		t.Errorf("Cannot initialize the application, cause: %s !", err.Error())
 	}
 }
@@ -45,7 +47,7 @@ func TestInitialize(t *testing.T) {
 // Test the routes definition of the application
 func TestRoutes(t *testing.T) {
 	// Create an instance of the application
-	unleash := unleash.New()
+	unleash := engine.New()
 
 	// Get routes definine by the application
 	routesInfo := unleash.Engine.Routes()

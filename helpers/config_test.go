@@ -1,11 +1,11 @@
-package unleash_test
+package helpers_test
 
 import (
 	"os"
 	"reflect"
 	"testing"
 
-	"github.com/GoPex/unleash"
+	"github.com/GoPex/unleash/helpers"
 )
 
 type configTest struct {
@@ -26,12 +26,12 @@ var (
 		{"UNLEASH_API_KEY", "APIKey", "supersecret"},
 		{"UNLEASH_GIT_USERNAME", "GitUsername", "superuser"},
 		{"UNLEASH_GIT_PASSWORD", "GitPassword", "superpassword"},
-		{"UNLEASH_BITBUCKET_REPOSITORIES", "BitbucketRepositories", gopexBitbucketUrl + "," + gopexGithubUrl},
+		{"UNLEASH_BITBUCKET_REPOSITORIES", "BitbucketRepositories", "https://api.github.com/repos/GoPex,https://api.github.com/repos/GoPex"},
 	}
 )
 
 // Function to enable table driven test for Specification struct
-func getConfigValue(spec *unleash.Specification, field string) string {
+func getConfigValue(spec *helpers.Specification, field string) string {
 	r := reflect.ValueOf(spec)
 	f := reflect.Indirect(r).FieldByName(field)
 	return f.String()
@@ -45,7 +45,7 @@ func TestParseConfiguration(t *testing.T) {
 	}
 
 	// Call the parsing function to test
-	config, err := unleash.ParseConfiguration()
+	config, err := helpers.ParseConfiguration()
 	if err != nil {
 		t.Error(err)
 	}
