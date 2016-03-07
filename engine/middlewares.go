@@ -1,4 +1,4 @@
-package unleash
+package engine
 
 import (
 	"bytes"
@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/GoPex/unleash/bindings"
+	"github.com/GoPex/unleash/helpers"
 )
 
 // verifySignature is a function to check the incoming's request signature
@@ -65,7 +66,7 @@ func verifyGithubSignature(c *gin.Context) error {
 	}
 
 	// Construct the expected mac with the api key
-	mac := hmac.New(sha1.New, []byte(Config.APIKey))
+	mac := hmac.New(sha1.New, []byte(helpers.Config.APIKey))
 	mac.Write(body)
 	expectedMAC := mac.Sum(nil)
 	expectedSig := "sha1=" + hex.EncodeToString(expectedMAC)
@@ -110,7 +111,7 @@ func verifyBitbucketSignature(c *gin.Context) error {
 	// registred
 	unauthorized := true
 	repositoryToBuild := pushEvent.Repository.Links.HTML.Href
-	tokens := strings.Split(Config.BitbucketRepositories, ",")
+	tokens := strings.Split(helpers.Config.BitbucketRepositories, ",")
 	for _, registredRepositoryURL := range tokens {
 		if repositoryToBuild == registredRepositoryURL {
 			unauthorized = false

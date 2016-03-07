@@ -1,16 +1,19 @@
-package unleash_test
+package handlers_test
 
 import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/GoPex/unleash"
 	"github.com/GoPex/unleash/bindings"
+	"github.com/GoPex/unleash/handlers"
+	"github.com/GoPex/unleash/helpers"
+	"github.com/GoPex/unleash/tests"
 )
 
 // Test the PingHandler
@@ -19,7 +22,7 @@ func TestPingHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	router := gin.New()
-	router.GET("/info/ping", unleash.PingHandler)
+	router.GET("/info/ping", handlers.PingHandler)
 
 	router.ServeHTTP(w, req)
 
@@ -43,7 +46,7 @@ func TestStatusHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	router := gin.New()
-	router.GET("/info/status", unleash.StatusHandler)
+	router.GET("/info/status", handlers.StatusHandler)
 
 	router.ServeHTTP(w, req)
 
@@ -71,7 +74,7 @@ func TestVersionHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	router := gin.New()
-	router.GET("/info/version", unleash.VersionHandler)
+	router.GET("/info/version", handlers.VersionHandler)
 
 	router.ServeHTTP(w, req)
 
@@ -84,8 +87,8 @@ func TestVersionHandler(t *testing.T) {
 		t.Error("Response body could not be parsed !")
 	}
 
-	if version.Version != unleash.UnleashVersion {
-		t.Errorf("Version response is not equal to unleash constant version ! Expected %s, got %s.", unleash.UnleashVersion, version.Version)
+	if version.Version != helpers.UnleashVersion {
+		t.Errorf("Version response is not equal to unleash constant version ! Expected %s, got %s.", helpers.UnleashVersion, version.Version)
 	}
 
 	if version.DockerHostVersion == "unavailable" || version.DockerHostVersion == "" {
@@ -101,9 +104,12 @@ type handlerTest struct {
 }
 
 var (
+	testGithubPushEventJSON    = filepath.Join(tests.DataDirectory, "github_push_event.json")
+	testBitbucketPushEventJSON = filepath.Join(tests.DataDirectory, "bitbucket_push_event.json")
+
 	handlerTests = []handlerTest{
-		{"./tests/data/github_push_event.json", unleash.GithubPushHandler},
-		{"./tests/data/bitbucket_push_event.json", unleash.BitbucketPushHandler},
+		{testGithubPushEventJSON, handlers.GithubPushHandler},
+		{testBitbucketPushEventJSON, handlers.BitbucketPushHandler},
 	}
 )
 
@@ -112,7 +118,7 @@ func TestPushHandlers(t *testing.T) {
 	for _, handlerTest := range handlerTests {
 		body, err := os.Open(handlerTest.jsonInputPath)
 		if err != nil {
-			t.Fatalf("Unable to open %s to be send as the body of the POST request !", testGithubPushEventJSON)
+			t.Fatalf("Unable to open %s to be send as the body of the POST request ! Cause: %s", testGithubPushEventJSON, err)
 		}
 
 		req, _ := http.NewRequest("POST", "/push", body)

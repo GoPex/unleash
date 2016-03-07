@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/GoPex/unleash"
+	"github.com/GoPex/unleash/engine"
+	"github.com/GoPex/unleash/helpers"
 )
 
 func main() {
 	// Create a new Unleash application
-	application := unleash.New()
+	application := engine.New()
 
 	// Parse the configuration
-	config, err := unleash.ParseConfiguration()
+	config, err := helpers.ParseConfiguration()
 	if err != nil {
 		panic("Not able to parse the configuration ! Cause: " + err.Error())
 	}

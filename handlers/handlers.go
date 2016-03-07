@@ -1,4 +1,4 @@
-package unleash
+package handlers
 
 import (
 	"net/http"
@@ -7,8 +7,9 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 
-	// Internal bindings
 	"github.com/GoPex/unleash/bindings"
+	"github.com/GoPex/unleash/helpers"
+	"github.com/GoPex/unleash/jobs"
 )
 
 // GithubPushHandler is an handler for the POST /events/github/push route.
@@ -23,10 +24,10 @@ func GithubPushHandler(c *gin.Context) {
 		branch := tokens[len(tokens)-1]
 
 		// Evaluate Github push event variables in the direct archive download URL
-		repositoryArchiveURL := EvaluateURL(pushEvent.Repository.ArchiveURL, branch)
+		repositoryArchiveURL := helpers.EvaluateURL(pushEvent.Repository.ArchiveURL, branch)
 
 		// Launch the build in background
-		go BuildAndPushFromRepository(repositoryArchiveURL,
+		go jobs.BuildAndPushFromRepository(repositoryArchiveURL,
 			pushEvent.Repository.FullName,
 			branch,
 			pushEvent.HeadCommit.ID)
@@ -57,7 +58,7 @@ func BitbucketPushHandler(c *gin.Context) {
 			repositoryArchiveURL := pushEvent.Repository.Links.HTML.Href + "/get/" + change.New.Name + ".tar.gz"
 
 			// Launch the build in background
-			go BuildAndPushFromRepository(repositoryArchiveURL,
+			go jobs.BuildAndPushFromRepository(repositoryArchiveURL,
 				pushEvent.Repository.FullName,
 				change.New.Name,
 				change.New.Target.Hash)
@@ -87,7 +88,7 @@ func PingHandler(c *gin.Context) {
 // This will respond  by the status of the server and of the docker host in a
 // JSON message.
 func StatusHandler(c *gin.Context) {
-	pong, err := Ping()
+	pong, err := helpers.Ping()
 	if err != nil {
 		log.Error("Error trying to ping Docker host, cause: ", err)
 		c.JSON(http.StatusServiceUnavailable,
@@ -104,16 +105,16 @@ func StatusHandler(c *gin.Context) {
 // VersionHandler Handler for the GET /info/version route. This will respond a
 // JSON message with the version of Docker running in the Docker host.
 func VersionHandler(c *gin.Context) {
-	version, err := Version()
+	version, err := helpers.Version()
 	if err != nil {
 		log.Error("Error trying to get the Docker host version, cause: ", err)
 		c.JSON(http.StatusServiceUnavailable,
-			bindings.VersionResponse{Version: UnleashVersion,
+			bindings.VersionResponse{Version: helpers.UnleashVersion,
 				DockerHostVersion: "unavailable"},
 		)
 	}
 	c.JSON(http.StatusOK,
-		bindings.VersionResponse{Version: UnleashVersion,
+		bindings.VersionResponse{Version: helpers.UnleashVersion,
 			DockerHostVersion: version},
 	)
 }

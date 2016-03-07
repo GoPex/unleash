@@ -1,8 +1,16 @@
-package unleash
+package helpers
 
 import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/kelseyhightower/envconfig"
+)
+
+var (
+	// Config make things easier but is bad
+	Config *Specification
+
+	// UnleashVersion
+	UnleashVersion = "0.1.0"
 )
 
 // Describe will log all variables parsed with envconfig
