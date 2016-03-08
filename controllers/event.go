@@ -1,10 +1,9 @@
-package handlers
+package controllers
 
 import (
 	"net/http"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 
 	"github.com/GoPex/unleash/bindings"
@@ -12,10 +11,10 @@ import (
 	"github.com/GoPex/unleash/jobs"
 )
 
-// GithubPushHandler is an handler for the POST /events/github/push route.
+// PostGithub is an handler for the POST /events/github/push route.
 // Based on the event received from Github, this will schedule a
 // BuildAndPushFromRepository background job.
-func GithubPushHandler(c *gin.Context) {
+func PostGithub(c *gin.Context) {
 	// Parse incomming JSON from github
 	var pushEvent bindings.GithubPushEvent
 	if c.BindJSON(&pushEvent) == nil {
@@ -46,10 +45,10 @@ func GithubPushHandler(c *gin.Context) {
 	}
 }
 
-// BitbucketPushHandler is and handler for the POST /events/bitbucket/push route.
+// PostBitbucket is and handler for the POST /events/bitbucket/push route.
 // Based on the event received from Bitbucket, this will schedule a
 // BuildAndPushFromRepository background job.
-func BitbucketPushHandler(c *gin.Context) {
+func PostBitbucket(c *gin.Context) {
 	// Parse incomming JSON from github
 	var pushEvent bindings.BitbucketPushEvent
 	if c.BindJSON(&pushEvent) == nil {
@@ -76,45 +75,4 @@ func BitbucketPushHandler(c *gin.Context) {
 				Message: "JSON binding failed !"},
 		)
 	}
-}
-
-// PingHandler is the handler for the GET /info/ping route.
-// This will respond by a pong JSON message if the server is alive
-func PingHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, bindings.PingResponse{Pong: "OK"})
-}
-
-// StatusHandler is an Handler for the GET /info/status route.
-// This will respond  by the status of the server and of the docker host in a
-// JSON message.
-func StatusHandler(c *gin.Context) {
-	pong, err := helpers.Ping()
-	if err != nil {
-		log.Error("Error trying to ping Docker host, cause: ", err)
-		c.JSON(http.StatusServiceUnavailable,
-			bindings.StatusResponse{Status: "OK",
-				DockerHostStatus: pong},
-		)
-	}
-	c.JSON(http.StatusOK,
-		bindings.StatusResponse{Status: "OK",
-			DockerHostStatus: pong},
-	)
-}
-
-// VersionHandler Handler for the GET /info/version route. This will respond a
-// JSON message with the version of Docker running in the Docker host.
-func VersionHandler(c *gin.Context) {
-	version, err := helpers.Version()
-	if err != nil {
-		log.Error("Error trying to get the Docker host version, cause: ", err)
-		c.JSON(http.StatusServiceUnavailable,
-			bindings.VersionResponse{Version: helpers.UnleashVersion,
-				DockerHostVersion: "unavailable"},
-		)
-	}
-	c.JSON(http.StatusOK,
-		bindings.VersionResponse{Version: helpers.UnleashVersion,
-			DockerHostVersion: version},
-	)
 }

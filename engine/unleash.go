@@ -3,10 +3,11 @@ package engine
 import (
 	"os"
 
-	"github.com/GoPex/unleash/handlers"
-	"github.com/GoPex/unleash/helpers"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+
+	"github.com/GoPex/unleash/controllers"
+	"github.com/GoPex/unleash/helpers"
 )
 
 // Unleash struct holding everything needed to serve Unleash application
@@ -57,17 +58,19 @@ func New() *Unleash {
 	// Routes
 	// Github push event
 	githubEvents := unleash.Engine.Group("/events/github", HmacAuthenticator(verifyGithubSignature))
-	githubEvents.POST("/push", handlers.GithubPushHandler)
+	githubEvents.POST("/push", controllers.PostGithub)
 
 	// Bitbucket push event
 	bitbucketEvents := unleash.Engine.Group("/events/bitbucket", HmacAuthenticator(verifyBitbucketSignature))
-	bitbucketEvents.POST("/push", handlers.BitbucketPushHandler)
+	bitbucketEvents.POST("/push", controllers.PostBitbucket)
+
+	// Ping route
+	unleash.Engine.GET("/ping", controllers.GetPing)
 
 	// Info routes
 	info := unleash.Engine.Group("/info")
-	info.GET("/ping", handlers.PingHandler)
-	info.GET("/status", handlers.StatusHandler)
-	info.GET("/version", handlers.VersionHandler)
+	info.GET("/status", controllers.GetStatus)
+	info.GET("/version", controllers.GetVersion)
 
 	return &unleash
 }

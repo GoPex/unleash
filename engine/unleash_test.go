@@ -5,8 +5,8 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/GoPex/unleash/controllers"
 	"github.com/GoPex/unleash/engine"
-	"github.com/GoPex/unleash/handlers"
 	"github.com/GoPex/unleash/tests"
 )
 
@@ -20,11 +20,11 @@ type expectedRoute struct {
 // Var used by table driven test for routes
 var (
 	expectedRoutes = []expectedRoute{
-		{"GET", "/info/ping", handlers.PingHandler},
-		{"GET", "/info/status", handlers.StatusHandler},
-		{"GET", "/info/version", handlers.VersionHandler},
-		{"POST", "/events/github/push", handlers.GithubPushHandler},
-		{"POST", "/events/bitbucket/push", handlers.BitbucketPushHandler},
+		{"GET", "/ping", controllers.GetPing},
+		{"GET", "/info/status", controllers.GetStatus},
+		{"GET", "/info/version", controllers.GetVersion},
+		{"POST", "/events/github/push", controllers.PostGithub},
+		{"POST", "/events/bitbucket/push", controllers.PostBitbucket},
 	}
 )
 
