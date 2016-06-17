@@ -4,6 +4,7 @@ import (
 	"os"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/contrib/renders/multitemplate"
 	"github.com/gin-gonic/gin"
 
 	"github.com/GoPex/unleash/controllers"
@@ -55,6 +56,14 @@ func New() *Unleash {
 	// Create a default gin stack
 	unleash.Engine = gin.Default()
 
+	// Load all html templates
+	templates := multitemplate.New()
+	templates.AddFromFiles("login",
+		"templates/layout.tmpl",
+		"templates/login.tmpl")
+
+	unleash.Engine.HTMLRender = templates
+
 	// Routes
 	// Github push event
 	githubEvents := unleash.Engine.Group("/events/github", HmacAuthenticator(verifyGithubSignature))
@@ -71,6 +80,15 @@ func New() *Unleash {
 	info := unleash.Engine.Group("/info")
 	info.GET("/status", controllers.GetStatus)
 	info.GET("/version", controllers.GetVersion)
+
+	// Root
+	unleash.Engine.GET("/", controllers.Root)
+
+	// Users
+	//users := unleash.Engine.Group("/users")
+
+	// Load all static assets
+	unleash.Engine.Static("/static", "./static")
 
 	return &unleash
 }
