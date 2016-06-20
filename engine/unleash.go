@@ -1,7 +1,10 @@
 package engine
 
 import (
+	"html/template"
 	"os"
+	"path/filepath"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/contrib/renders/multitemplate"
@@ -15,6 +18,30 @@ import (
 type Unleash struct {
 	Engine *gin.Engine
 	Config *helpers.Specification
+}
+
+// loadTemplates loads every templates applying includes while loading them
+func loadTemplates(templatesDir string) multitemplate.Render {
+	r := multitemplate.New()
+
+	layouts, err := filepath.Glob(filepath.Join(templatesDir, "layouts/*.tmpl"))
+	if err != nil {
+		panic(err.Error())
+	}
+
+	includes, err := filepath.Glob(filepath.Join(templatesDir, "includes/*.tmpl"))
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// Generate our templates map from our layouts/ and includes/ directories
+	for _, layout := range layouts {
+		files := append(includes, layout)
+		layoutName := strings.TrimSuffix(filepath.Base(layout), filepath.Ext(layout))
+		r.Add(layoutName, template.Must(template.ParseFiles(files...)))
+	}
+
+	return r
 }
 
 // Initialize to be executed before the application runs
@@ -56,13 +83,8 @@ func New() *Unleash {
 	// Create a default gin stack
 	unleash.Engine = gin.Default()
 
-	// Load all html templates
-	templates := multitemplate.New()
-	templates.AddFromFiles("login",
-		"templates/layout.tmpl",
-		"templates/login.tmpl")
-
-	unleash.Engine.HTMLRender = templates
+	// Load templates
+	unleash.Engine.HTMLRender = loadTemplates("templates")
 
 	// Routes
 	// Github push event
@@ -82,10 +104,7 @@ func New() *Unleash {
 	info.GET("/version", controllers.GetVersion)
 
 	// Root
-	unleash.Engine.GET("/", controllers.Root)
-
-	// Users
-	//users := unleash.Engine.Group("/users")
+	unleash.Engine.GET("/", controllers.GetHome)
 
 	// Load all static assets
 	unleash.Engine.Static("/static", "./static")
