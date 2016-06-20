@@ -19,7 +19,6 @@ var PingDockerHost = React.createClass({
   handleClick: function(e) {
     e.preventDefault();
     this.ping()
-    this.blur()
   },
 
   getInitialState: function() {
