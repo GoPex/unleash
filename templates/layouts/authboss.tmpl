@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Unleash</title>
+
+    <!-- jquery -->
+    <script type="text/javascript" src="/static/js/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="/static/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap/theme/flatly/bootstrap.min.css">
+	  <script type="text/javascript" src="/static/js/bootstrap/bootstrap.min.js"></script>
+
+    <!-- Font awesome -->
+	  <link rel="stylesheet" href="/static/css/font-awesome/font-awesome.min.css" />
+
+    <!-- ReactJS -->
+    <script type="text/javascript" src="/static/js/react/react.js"></script>
+    <script type="text/javascript" src="/static/js/react/react-dom.js"></script>
+
+    <!-- Babel -->
+    <script type="text/javascript" src="/static/js/babel/browser.min.js"></script>
+
+    <!-- Unleash -->
+    <link rel="stylesheet" href="/static/css/unleash.css">
+    <script type="text/babel" src="/static/js/unleash.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">Unleash</a>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-main">
+
+          <ul class="nav navbar-nav navbar-right">
+            <li id="ping-docker-host"></li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <div class="jumbotron">
+      <div class="container">
+    {{with .flash_success}}<div class="alert alert-success">{{.}}</div>{{end}}
+    {{with .flash_error}}<div class="alert alert-danger">{{.}}</div>{{end}}
+    {{template "yield" .}}
+    {{template "authboss" .}}
+
+      </div>
+    </div>
+
+  </body>
+</html>
+{{define "pagetitle"}}{{end}}
+{{define "yield"}}{{end}}
+{{define "authboss"}}{{end}}

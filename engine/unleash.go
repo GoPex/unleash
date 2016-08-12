@@ -38,6 +38,7 @@ func loadTemplates(templatesDir string) multitemplate.Render {
 	for _, layout := range layouts {
 		files := append(includes, layout)
 		layoutName := strings.TrimSuffix(filepath.Base(layout), filepath.Ext(layout))
+		log.Info(layoutName)
 		r.Add(layoutName, template.Must(template.ParseFiles(files...)))
 	}
 
@@ -84,7 +85,11 @@ func New() *Unleash {
 	unleash.Engine = gin.Default()
 
 	// Load templates
-	unleash.Engine.HTMLRender = loadTemplates("templates")
+	//unleash.Engine.HTMLRender = loadTemplates("templates")
+	unleash.Engine.LoadHTMLGlob("resources/views/gin-gonic/*")
+
+	// Load all static assets
+	unleash.Engine.Static("/static", "./static")
 
 	// Routes
 	// Github push event
@@ -106,8 +111,8 @@ func New() *Unleash {
 	// Root
 	unleash.Engine.GET("/", controllers.GetHome)
 
-	// Load all static assets
-	unleash.Engine.Static("/static", "./static")
+	// Authboss
+	unleash.Engine.Any("/auth/*w", gin.WrapH(initAuthBossParam(unleash.Engine).NewRouter()))
 
 	return &unleash
 }
